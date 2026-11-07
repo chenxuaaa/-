@@ -24,7 +24,7 @@ html,body{
   -webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;
   touch-action:none;overscroll-behavior:none;
 }
-canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
+canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
 #stage{position:fixed;inset:0;z-index:2;pointer-events:none}
 .hide{display:none!important}
 
@@ -108,7 +108,7 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
   font-family:var(--mono);font-size:11px;color:#647d8d;letter-spacing:.1em;
 }
 .hpbox .lbl b{color:#ff9aab;font-weight:600}
-#centerTop{text-align:center;flex:0 0 auto}
+#centerTop{position:absolute;left:50%;top:16px;transform:translateX(-50%);text-align:center}
 #clock{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:.1em;color:#dff5f5;line-height:1}
 #depth{
   margin-top:7px;font-size:10.5px;letter-spacing:.3em;color:#5b7484;
@@ -122,12 +122,13 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
 /* 经验条 */
 #xpwrap{position:absolute;left:0;right:0;bottom:0;padding:0 0 14px}
 #xpbar{
-  height:4px;background:rgba(255,255,255,.05);position:relative;overflow:hidden;
+  height:5px;margin:0 16px 12px;border-radius:3px;
+  background:rgba(255,255,255,.045);position:relative;overflow:hidden;
 }
 #xpfill{
   position:absolute;inset:0 auto 0 0;width:0%;
-  background:linear-gradient(90deg,rgba(45,212,191,.55),rgba(94,234,212,.9) 60%,#a7f3ea);
-  box-shadow:0 0 9px rgba(94,234,212,.4);
+  background:linear-gradient(90deg,rgba(45,212,191,.45),rgba(94,234,212,.80) 65%,rgba(167,243,234,.95));
+  box-shadow:0 0 10px rgba(94,234,212,.34);
   transition:width .12s linear;
 }
 #lvbadge{
@@ -144,7 +145,7 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
 }
 #gauge.on{opacity:1}
 #gaugeBar{width:190px;height:4px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
-#gaugeFill{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 14px var(--cyan)}
+#gaugeFill{height:100%;width:100%;transform:scaleX(0);transform-origin:left center;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 14px var(--cyan);will-change:transform}
 #gaugeTxt{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:#7fa3b3}
 
 #tips{
@@ -207,8 +208,7 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
 
 /* ============ 升级三选一 ============ */
 #levelup{
-  background:radial-gradient(circle at 50% 42%,rgba(10,40,50,.62),rgba(2,4,8,.9) 72%);
-  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+  background:radial-gradient(circle at 50% 42%,rgba(10,40,50,.80),rgba(2,4,8,.95) 72%);
 }
 #lvHead{text-align:center;margin-bottom:6px}
 #lvHead .big{font-size:13px;letter-spacing:.5em;color:var(--cyan);font-family:var(--mono)}
@@ -265,7 +265,7 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
 #lvHint{margin-top:16px;font-size:11px;color:#4d6473;letter-spacing:.16em;font-family:var(--mono)}
 
 /* ============ 结算 ============ */
-#over{background:radial-gradient(circle at 50% 40%,rgba(52,8,20,.55),rgba(2,3,7,.94) 70%);backdrop-filter:blur(5px)}
+#over{background:radial-gradient(circle at 50% 40%,rgba(52,8,20,.70),rgba(2,3,7,.96) 70%)}
 #overBox{width:min(520px,92vw);padding:30px 32px 26px;text-align:center}
 #overTitle{
   font-size:32px;font-weight:800;letter-spacing:.3em;color:#ff8ea3;
@@ -299,7 +299,7 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
 #unlockLine em{font-style:normal;font-weight:700}
 
 /* ============ 解锁树 / 统计 ============ */
-#meta{background:rgba(2,4,9,.86);backdrop-filter:blur(8px)}
+#meta{background:rgba(2,4,9,.93)}
 #metaBox{
   width:min(760px,94vw);max-height:88vh;display:flex;flex-direction:column;
   padding:24px 26px 20px;overflow:hidden;
@@ -345,11 +345,79 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* 暂停 */
-#pause{background:rgba(2,4,9,.72);backdrop-filter:blur(6px)}
+#pause{background:rgba(2,4,9,.86)}
 #pause .pbox{padding:28px 40px;text-align:center}
 #pause h2{font-size:22px;letter-spacing:.4em;margin-bottom:6px;margin-left:.4em}
 #pause p{font-size:12px;color:#61798a;letter-spacing:.1em;margin-bottom:20px;font-family:var(--mono)}
 #pause .pr{display:flex;gap:10px;justify-content:center}
+/* ============ 触屏适配 ============ */
+#joy,#dashBtn{display:none}
+.touchOnly{display:none}
+body.touch .touchOnly{display:block}
+body.touch .kbRow{display:none}
+body.touch #joy{
+  display:block;position:fixed;left:max(16px,env(safe-area-inset-left));
+  bottom:max(20px,env(safe-area-inset-bottom));width:130px;height:130px;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,rgba(22,56,78,.60),rgba(8,18,30,.34));
+  border:1.5px solid rgba(94,234,212,.44);z-index:60;touch-action:none;
+  box-shadow:0 0 26px -8px rgba(94,234,212,.55),inset 0 0 22px rgba(94,234,212,.10);
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+#joyK{
+  position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;
+  background:radial-gradient(circle at 38% 34%,rgba(150,255,240,.62),rgba(94,234,212,.16));
+  border:1.5px solid rgba(185,255,245,.80);box-shadow:0 0 26px rgba(94,234,212,.75);
+  will-change:transform;pointer-events:none;
+}
+body.touch #dashBtn{
+  display:flex;align-items:center;justify-content:center;position:fixed;
+  right:max(20px,env(safe-area-inset-right));bottom:max(30px,env(safe-area-inset-bottom));
+  width:82px;height:82px;border-radius:50%;
+  background:radial-gradient(circle at 42% 36%,rgba(167,139,250,.52),rgba(94,234,212,.16));
+  border:1.5px solid rgba(196,170,255,.75);color:#e6dcff;
+  font:600 13px/1 ui-monospace,Consolas,monospace;letter-spacing:.14em;
+  box-shadow:0 0 26px -4px rgba(167,139,250,.85);z-index:60;
+  touch-action:none;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+body.touch #pauseBtn{
+  display:flex;align-items:center;justify-content:center;position:fixed;
+  right:max(10px,env(safe-area-inset-right));top:50px;width:40px;height:40px;border-radius:11px;
+  background:rgba(20,42,60,.86);border:1px solid rgba(94,234,212,.55);color:#c2f7ef;
+  font:600 13px/1 ui-monospace,Consolas,monospace;z-index:61;letter-spacing:0;
+  box-shadow:0 0 16px -4px rgba(94,234,212,.75);
+  touch-action:none;-webkit-tap-highlight-color:transparent;
+}
+body.touch #pauseBtn:active{background:rgba(94,234,212,.18)}
+#pauseBtn{display:none}
+body.touch #dashBtn:active{transform:scale(.94);background:rgba(167,139,250,.32)}
+body.touch #dashBtn.cd{opacity:.30}
+
+#rotate{display:none;position:fixed;inset:0;z-index:200;background:#04060b;
+  align-items:center;justify-content:center;flex-direction:column;gap:20px;
+  color:#9dc4d4;font-size:14px;letter-spacing:.1em;text-align:center;padding:24px}
+#rotate .ic{font-size:40px;color:#5eead4;animation:rot 2.6s ease-in-out infinite}
+@keyframes rot{0%,100%{transform:rotate(0)}50%{transform:rotate(90deg)}}
+@media (orientation:portrait){body.touch #rotate{display:flex}}
+
+/* 小屏收紧 HUD */
+@media (max-width:900px){
+  #hud .top{padding:10px 12px 0}
+  #clock{font-size:30px}
+  #depth{font-size:10px}
+  #killNum{font-size:24px}
+  #gauge{transform:translateX(-50%) scale(.86)}
+  #tips{font-size:11px;padding:0 16px}
+  #buffs .buff{font-size:10px;padding:3px 7px}
+  #blast{font-size:38px}
+  #chain{font-size:24px}
+  #levelup .card{width:200px;padding:14px 14px 12px}
+  #menu .brand .t1{font-size:56px}
+}
+@media (max-height:560px){
+  #levelup .card{width:178px;padding:11px 12px 10px}
+  #levelup .card .ds{font-size:11px}
+}
+
 </style>
 </head>
 <body>
@@ -357,6 +425,10 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
 
 <div id="stage">
 
+  <div id="joy"><div id="joyK"></div></div>
+  <button id="dashBtn">冲刺</button>
+  <button id="pauseBtn">Ⅱ</button>
+  <div id="rotate"><div class="ic">▭</div><div>横过手机，宇宙才铺得开</div></div>
   <!-- ============ HUD ============ -->
   <div id="hud" class="hide">
     <div class="top">
@@ -378,7 +450,7 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
       <div id="gaugeBar"><div id="gaugeFill"></div></div>
       <div id="gaugeTxt">引力积累</div>
     </div>
-    <div id="tips"></div>
+  <div id="tips"></div>
   <div id="chain"></div>
   <div id="blast"></div>
     <div id="xpwrap">
@@ -402,6 +474,7 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
       <div class="row">
         <button class="btn ghost small" id="btnMeta">核心室</button>
         <button class="btn ghost small" id="btnHelp">操作说明</button>
+        <button class="btn ghost small" id="btnFlash">闪光 · 开</button>
       </div>
     </div>
     <div class="stats">
@@ -468,16 +541,23 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0}
     <div class="glass" style="max-width:600px;padding:30px 34px">
       <h2 style="font-size:20px;letter-spacing:.3em;margin-bottom:18px">操 作 说 明</h2>
       <div style="font-size:13.5px;line-height:2.05;color:#9fb8c6">
-        <div><span class="kbd">W</span> <span class="kbd">A</span> <span class="kbd">S</span> <span class="kbd">D</span> &nbsp;或&nbsp; <span class="kbd">方向键</span> &nbsp;— 移动</div>
-        <div><span class="kbd">按住鼠标左键</span> &nbsp;— 在光标处张开引力井，<b style="color:var(--cyan)">持续蓄力</b></div>
-        <div><span class="kbd">松开</span> &nbsp;— <b style="color:var(--violet)">塌缩</b>：伤害由被吸入的力量总量决定</div>
-        <div><span class="kbd">空格</span> &nbsp;— 在面朝方向张开引力井（键盘流）</div>
-        <div><span class="kbd">Shift</span> &nbsp;— 冲刺（短暂无敌，有冷却）</div>
-        <div><span class="kbd">Esc</span> &nbsp;— 暂停</div>
+        <div class="touchOnly">
+          <div><span class="kbd">左下摇杆</span> — 移动（可拖到任意方向）</div>
+          <div><span class="kbd">按住屏幕</span> — 在按下的位置张开引力井，<b style="color:var(--cyan)">持续蓄力</b></div>
+          <div><span class="kbd">松手</span> — <b style="color:var(--violet)">塌缩</b></div>
+          <div><span class="kbd">右下圆键</span> — 冲刺</div>
+          <div><span class="kbd">右上 Ⅱ</span> — 暂停</div>
+        </div>
+        <div class="kbRow"><span class="kbd">W</span> <span class="kbd">A</span> <span class="kbd">S</span> <span class="kbd">D</span> &nbsp;或&nbsp; <span class="kbd">方向键</span> &nbsp;— 移动</div>
+        <div class="kbRow"><span class="kbd">按住鼠标左键</span> &nbsp;— 在光标处张开引力井，<b style="color:var(--cyan)">持续蓄力</b></div>
+        <div class="kbRow"><span class="kbd">松开</span> &nbsp;— <b style="color:var(--violet)">塌缩</b>：伤害由被吸入的力量总量决定</div>
+        <div class="kbRow"><span class="kbd">空格</span> &nbsp;— 在面朝方向张开引力井（键盘流）</div>
+        <div class="kbRow"><span class="kbd">Shift</span> &nbsp;— 冲刺（短暂无敌，有冷却）</div>
+        <div class="kbRow"><span class="kbd">Esc</span> &nbsp;— 暂停</div>
         <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
           <b style="color:var(--cyan)">核心技巧：</b>蓄力时你会变慢，井会变大。<br />
           吸得越多，塌缩越狠——但吸住的敌人也会涌向你。<br />
-          <b style="color:var(--gold)">忍到最后一刻再松手。</b>
+          <b style="color:var(--gold)">忍到最后一刻再松手。</b><br /><span style="color:#61798a">快捷键：<span class="kbd">Esc</span> 暂停 · <span class="kbd">M</span> 静音 · <span class="kbd">`</span> 调试信息</span>
         </div>
       </div>
       <div style="margin-top:22px;text-align:right">
@@ -556,6 +636,7 @@ const DEFAULT_SAVE = {
   seen: {},           // 已见过的演化（用于图鉴）
   maxCombo: 0,
   firstRunDone: false,
+  fx: 1,               // 1 = 全屏闪光效果开启，0 = 关闭（护眼）
 };
 const SAVE = Object.assign({}, DEFAULT_SAVE, {
   meta: {}, seen: {},
@@ -606,7 +687,9 @@ const SFX = {
   },
   resume() {
     if (!this.ctx) this.boot();
-    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    if (!this.ctx) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+    this.ambient.start();
   },
   tone(o) {
     if (!this.ctx || this.muted) return;
@@ -667,16 +750,213 @@ const SFX = {
     this.tone({ type: 'sine', f0: 220, f1: 55, dur: 1.1, gain: 0.14 });
     this.tone({ type: 'triangle', f0: 110, f1: 40, dur: 1.3, gain: 0.09, delay: 0.1 });
   },
+
+  /* ============================================================
+     宇宙环境音：一层永远存在的"深空底噪"。
+     不是旋律，是尺度——低频 drone 撑出空间的体积，
+     滤波噪声像星风，偶尔一颗星辰在很远的地方敲响。
+     ============================================================ */
+  ambient: {
+    started: false, bus: null, conv: null, oscs: [], timer: 0, depth: 1,
+    start() {
+      const S = SFX;
+      if (this.started || !S.ctx) return;
+      const c = S.ctx;
+      this.started = true;
+
+      const bus = c.createGain();
+      bus.gain.value = 0.0001;
+      bus.connect(S.master);
+      this.bus = bus;
+
+      // 3.2 秒指数衰减脉冲响应 —— 让每一声都有宇宙尺度的尾巴
+      const conv = c.createConvolver();
+      const irLen = Math.floor(c.sampleRate * 3.2);
+      const ir = c.createBuffer(2, irLen, c.sampleRate);
+      for (let ch = 0; ch < 2; ch++) {
+        const d = ir.getChannelData(ch);
+        for (let i = 0; i < irLen; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 3.4);
+      }
+      conv.buffer = ir;
+      const wet = c.createGain(); wet.gain.value = 0.5;
+      conv.connect(wet); wet.connect(bus);
+      this.conv = conv;
+
+      // 深空 drone：三个几乎重合的低频，靠微小失谐缓慢拍频
+      const droneG = c.createGain();
+      droneG.gain.value = 0.055;
+      const lp = c.createBiquadFilter();
+      lp.type = 'lowpass'; lp.frequency.value = 230; lp.Q.value = 1.1;
+      lp.connect(droneG); droneG.connect(bus);
+      this.lp = lp;
+      this.droneG = droneG;
+      const freqs = [55, 55.45, 82.41];
+      const types = ['sine', 'sine', 'triangle'];
+      const vols = [1, 0.9, 0.26];
+      this.oscs = [];
+      for (let i = 0; i < 3; i++) {
+        const o = c.createOscillator();
+        o.type = types[i];
+        o.frequency.value = freqs[i];
+        const g = c.createGain(); g.gain.value = vols[i];
+        o.connect(g); g.connect(lp);
+        o.start();
+        this.oscs.push(o);
+      }
+      // 呼吸：极慢的幅度起伏，让人分不清是声音还是错觉
+      const lfo = c.createOscillator(); lfo.type = 'sine'; lfo.frequency.value = 0.037;
+      const lfoG = c.createGain(); lfoG.gain.value = 0.013;
+      lfo.connect(lfoG); lfoG.connect(droneG.gain);
+      lfo.start();
+
+      // 星风：白噪声过带通，中心频率被更慢的 LFO 扫动
+      const src = c.createBufferSource();
+      src.buffer = S.noiseBuf; src.loop = true;
+      const bp = c.createBiquadFilter();
+      bp.type = 'bandpass'; bp.frequency.value = 460; bp.Q.value = 3.4;
+      const windG = c.createGain(); windG.gain.value = 0.055;
+      src.connect(bp); bp.connect(windG); windG.connect(bus);
+      src.start();
+      this.bp = bp;
+      const wl = c.createOscillator(); wl.type = 'sine'; wl.frequency.value = 0.061;
+      const wlG = c.createGain(); wlG.gain.value = 240;
+      wl.connect(wlG); wlG.connect(bp.frequency);
+      wl.start();
+
+      // 5 秒缓慢淡入，别让玩家一进游戏就被声音砸到
+      const t = c.currentTime;
+      bus.gain.setValueAtTime(0.0001, t);
+      bus.gain.exponentialRampToValueAtTime(1, t + 5);
+
+      this.scheduleBell();
+    },
+
+    /* 一颗星辰在极远处敲响：A 大调泛音列，只取整数倍泛音，没有旋律 */
+    bell() {
+      const S = SFX;
+      if (!S.ctx || S.muted) return;
+      const c = S.ctx, t = c.currentTime + 0.02;
+      const pool = [110, 138.59, 164.81, 220, 277.18, 329.63, 440, 554.37];
+      const f = pool[(Math.random() * pool.length) | 0];
+      const dur = 3.6 + Math.random() * 3.8;
+      const g = c.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.026 + Math.random() * 0.02, t + 0.09);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      const partials = [1, 2.01, 3.02];
+      const pvol = [1, 0.32, 0.11];
+      for (let i = 0; i < 3; i++) {
+        const o = c.createOscillator();
+        o.type = 'sine';
+        o.frequency.value = f * partials[i];
+        const og = c.createGain(); og.gain.value = pvol[i];
+        o.connect(og); og.connect(g);
+        o.start(t); o.stop(t + dur + 0.05);
+      }
+      g.connect(this.bus);
+      if (this.conv) g.connect(this.conv);
+    },
+
+    scheduleBell() {
+      // 4.2–10.7 秒随机间隔，永远猜不到下一次
+      const ms = 4200 + Math.random() * 6500;
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        if (!this.started) return;
+        this.bell();
+        this.scheduleBell();
+      }, ms);
+    },
+
+    /* 深度联动：潜得越深，空间越低、星风越沉 */
+    setDepth(d) {
+      this.depth = d;
+      const c = SFX.ctx;
+      if (!c || !this.started) return;
+      const t = c.currentTime;
+      const k = U.clamp((d - 1) / 8, 0, 1);
+      if (this.lp) this.lp.frequency.setTargetAtTime(230 - k * 105, t, 1.6);
+      if (this.bp) this.bp.frequency.setTargetAtTime(460 - k * 210, t, 2.2);
+      if (this.droneG) this.droneG.gain.setTargetAtTime(0.055 + k * 0.022, t, 1.6);
+    },
+
+    /* 暂停/失焦时把环境音压下去，但不切断 */
+    duck(v) {
+      const c = SFX.ctx;
+      if (!c || !this.started || !this.bus) return;
+      this.bus.gain.setTargetAtTime(v, c.currentTime, 0.25);
+    },
+  },
+
+  toggleMute() {
+    this.muted = !this.muted;
+    if (this.master && this.ctx) {
+      const t = this.ctx.currentTime;
+      this.master.gain.cancelScheduledValues(t);
+      this.master.gain.setTargetAtTime(this.muted ? 0 : 0.32, t, 0.06);
+    }
+    return this.muted;
+  },
 };
 
 /* ==================================================================
    3. 输入
    ================================================================== */
+/* ---------------- 触屏输入 ---------------- */
+const TOUCH = (function () {
+  try {
+    if (/[?&]touch\b/.test(location.search)) return true;
+    return matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+  } catch (e) { return false; }
+})();
+
+// 虚拟摇杆：拇指拖动给出移动方向，和 WASD 走同一条 axis()
+const JOY = {
+  on: false, id: null, cx: 0, cy: 0, dx: 0, dy: 0, R: 54,
+  init(el, knob) {
+    if (!el || !knob) return;
+    const start = e => {
+      if (this.id !== null) return;
+      e.preventDefault(); e.stopPropagation();
+      this.id = e.pointerId; this.on = true;
+      const r = el.getBoundingClientRect();
+      this.cx = r.left + r.width / 2; this.cy = r.top + r.height / 2;
+      this.R = r.width * 0.42;
+      try { el.setPointerCapture(e.pointerId); } catch (err) { }
+      this.move(e, knob);
+    };
+    el.addEventListener('pointerdown', start);
+    el.addEventListener('pointermove', e => {
+      if (e.pointerId !== this.id) return;
+      e.preventDefault(); this.move(e, knob);
+    });
+    const end = e => {
+      if (e.pointerId !== this.id) return;
+      this.id = null; this.on = false; this.dx = 0; this.dy = 0;
+      knob.style.transform = 'translate(0px,0px)';
+    };
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    el.addEventListener('lostpointercapture', end);
+  },
+  move(e, knob) {
+    let dx = e.clientX - this.cx, dy = e.clientY - this.cy;
+    const d = Math.hypot(dx, dy);
+    if (d > this.R) { dx = dx / d * this.R; dy = dy / d * this.R; }
+    this.dx = d ? dx / this.R : 0;
+    this.dy = d ? dy / this.R : 0;
+    const m = Math.hypot(this.dx, this.dy);
+    if (m > 1) { this.dx /= m; this.dy /= m; }
+    knob.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px)';
+  },
+};
+
 const IN = {
   keys: Object.create(null),
   mx: 0, my: 0,            // 屏幕坐标（CSS 像素）
   wx: 0, wy: 0,            // 世界坐标
   mDown: false,
+  mId: null,           // 正在蓄力的那根手指 / 鼠标（多指触摸时不能互相打断）
   mDownAt: 0,
   spaceDown: false,
   wheel: 0,
@@ -694,16 +974,25 @@ const IN = {
       this.keys = Object.create(null);
       this.mDown = false; this.spaceDown = false;
     });
+    // 这里绝不能用 getBoundingClientRect()：按住左键时 HUD 每帧都在改样式，
+    // 布局始终处于待计算状态，高回报率鼠标每秒上千次 pointermove 就等于上千次
+    // 强制同步重排 —— 这正是按住左键拖动才卡、单纯晃鼠标却不卡的原因。
     const setM = e => {
-      const r = cv.getBoundingClientRect();
-      this.mx = e.clientX - r.left; this.my = e.clientY - r.top;
+      this.mx = e.clientX - CV.rect.left; this.my = e.clientY - CV.rect.top;
     };
-    cv.addEventListener('pointermove', e => { setM(e); });
+    cv.addEventListener('pointermove', e => { e.preventDefault(); setM(e); });
     cv.addEventListener('pointerdown', e => {
+      e.preventDefault();
       setM(e);
-      if (e.button === 0) { this.mDown = true; this.mDownAt = performance.now(); }
+      if (e.button === 0 && this.mId === null) {
+        this.mDown = true; this.mId = e.pointerId; this.mDownAt = performance.now();
+      }
     });
-    addEventListener('pointerup', e => { if (e.button === 0) this.mDown = false; });
+    const up = e => {
+      if (this.mId !== null && e.pointerId === this.mId) { this.mDown = false; this.mId = null; }
+    };
+    addEventListener('pointerup', up);
+    addEventListener('pointercancel', up);
     cv.addEventListener('contextmenu', e => e.preventDefault());
     cv.addEventListener('wheel', e => { this.wheel += e.deltaY; e.preventDefault(); }, { passive: false });
   },
@@ -713,7 +1002,9 @@ const IN = {
     if (this.keys['KeyD'] || this.keys['ArrowRight']) x += 1;
     if (this.keys['KeyW'] || this.keys['ArrowUp']) y -= 1;
     if (this.keys['KeyS'] || this.keys['ArrowDown']) y += 1;
-    if (x && y) { const s = Math.SQRT1_2; x *= s; y *= s; }
+    if (JOY.on) { x += JOY.dx; y += JOY.dy; }
+    const m = Math.hypot(x, y);
+    if (m > 1) { x /= m; y /= m; }
     return { x, y };
   },
 };
@@ -729,7 +1020,8 @@ const UI = {
       'hpFill', 'hpText', 'clock', 'depth', 'killNum', 'xpfill', 'lvNum', 'buffs',
       'gauge', 'gaugeFill', 'gaugeTxt', 'tips', 'chain', 'blast', 'lvCards', 'lvHead',
       'ovTime', 'ovKills', 'ovDepth', 'ovCry', 'gsCry', 'unlockLine', 'gainLine', 'ovEvos',
-      'metaList', 'cryNum', 'metaStat', 'stBest', 'stKills', 'stRuns', 'stCry'
+      'metaList', 'cryNum', 'metaStat', 'stBest', 'stKills', 'stRuns', 'stCry', 'btnFlash',
+      'joy', 'joyK', 'dashBtn', 'pauseBtn'
     ].forEach(id => this.el[id] = $(id));
   },
   show(name) {
@@ -758,7 +1050,7 @@ const UI = {
    5. 画布与相机
    ================================================================== */
 const CV = {
-  cv: null, ctx: null, w: 0, h: 0, dpr: 1,
+  cv: null, ctx: null, w: 0, h: 0, dpr: 1, rect: { left: 0, top: 0 },
   cam: { x: 0, y: 0, zoom: 1 },
   init() {
     this.cv = $('cv');
@@ -767,11 +1059,24 @@ const CV = {
     addEventListener('resize', () => this.resize());
   },
   resize() {
-    this.dpr = Math.min(devicePixelRatio || 1, 2);
     this.w = innerWidth; this.h = innerHeight;
+    /*
+      帧率的唯一瓶颈是像素填充率：实测画布每百万像素约 1.6ms，
+      340 万 ≈ 176fps、766 万 ≈ 71fps、1360 万 ≈ 46fps。
+      在 4K 或高 DPI 屏上全屏时画布很容易超过一千万像素，帧率就崩了。
+      因此这里按总像素预算反推 DPR，让任何屏幕都稳定在 60fps 以上——
+      像素数固定后，大屏只是渲染分辨率相对低一点（发光画风几乎看不出）。
+    */
+    // 老机器或驱动异常时可以用 index.html?lowfx 再降一档
+    const MAX_PX = /[?&]lowfx\b/.test(location.search) ? 2.4e6 : 4.2e6;
+    const cap = Math.sqrt(MAX_PX / Math.max(1, this.w * this.h));
+    this.dpr = Math.max(0.62, Math.min(devicePixelRatio || 1, 2, cap));
     this.cv.width = Math.floor(this.w * this.dpr);
     this.cv.height = Math.floor(this.h * this.dpr);
     this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    // 画布铺满全屏且 position:fixed，位置只在 resize 时可能变化。
+    // 缓存下来，避免 pointermove 高频读取时触发强制同步重排。
+    this.rect = this.cv.getBoundingClientRect();
   },
   toWorld(sx, sy) {
     return {
@@ -920,11 +1225,16 @@ const ACHIEVE = [
 /* ==== [ENT] ==== */
 
 /* ---------- 颜色 / 光晕纹理缓存（关键性能优化） ---------- */
+const _rgbCache = new Map();
 function hex2rgb(h) {
-  h = h.replace('#', '');
-  if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
-  const n = parseInt(h, 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  let c = _rgbCache.get(h);
+  if (c !== undefined) return c;
+  let s = h.replace('#', '');
+  if (s.length === 3) s = s[0] + s[0] + s[1] + s[1] + s[2] + s[2];
+  const n = parseInt(s, 16);
+  c = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  _rgbCache.set(h, c);
+  return c;
 }
 function rgba(hex, a) { const c = hex2rgb(hex); return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; }
 const _glowCache = new Map();
@@ -1071,7 +1381,7 @@ function makeEnemy(type, x, y, extra) {
 }
 function spawnAtEdge(type, extra, ang) {
   if (ang === undefined) ang = Math.random() * TAU;
-  const dist = Math.min(CV.w, CV.h) * 0.55 + U.rnd(30, 120);
+  const dist = Math.min(CV.w, CV.h) * 0.46 + U.rnd(20, 90);
   const x = P.x + Math.cos(ang) * dist;
   const y = P.y + Math.sin(ang) * dist;
   const e = makeEnemy(type, x, y, extra);
@@ -1157,6 +1467,14 @@ const DRAW = {
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = '#04060b';
     ctx.fillRect(0, 0, W_, H_);
+    // 空间底色：中心略暖、四周沉入纯黑，先给眼睛一个"深处有光"的错觉
+    const bgGrad = ctx.createRadialGradient(W_ * 0.5, H_ * 0.44, 40, W_ * 0.5, H_ * 0.44, Math.max(W_, H_) * 0.8);
+    bgGrad.addColorStop(0, 'rgba(20,18,40,0.55)');
+    bgGrad.addColorStop(0.55, 'rgba(8,10,24,0.34)');
+    bgGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W_, H_);
+    this.deepSky(ctx, W_, H_);
 
     const zoom = CV.cam.zoom;
     const shakeAmp = W.shake;
@@ -1175,10 +1493,11 @@ const DRAW = {
     const x0 = CV.cam.x - hw - 90, x1 = CV.cam.x + hw + 90;
     const y0 = CV.cam.y - hh - 90, y1 = CV.cam.y + hh + 90;
 
+    this.nebula(ctx, x0, y0, x1, y1);
     this.grid(x0, y0, x1, y1);
     this.stars(x0, y0, x1, y1);
 
-    this.wells(ctx);
+    this.wells(ctx, activeWells());
     this.orbs(ctx, x0, y0, x1, y1);
     this.enemies(ctx, x0, y0, x1, y1);
     this.bullets(ctx);
@@ -1194,7 +1513,7 @@ const DRAW = {
     if (W.state === 'menu' || W.state === 'meta' || W.state === 'help') this.menuCore(ctx, W_, H_);
     this.vignette(ctx, W_, H_);
     this.chargeUI(ctx, W_, H_);
-    if (W.flash > 0.005) {
+    if (SAVE.fx !== 0 && W.flash > 0.005) {
       ctx.globalCompositeOperation = 'lighter';
       ctx.fillStyle = 'rgba(120,240,225,' + (W.flash * 0.16) + ')';
       ctx.fillRect(0, 0, W_, H_);
@@ -1216,13 +1535,13 @@ const DRAW = {
     const ix0 = Math.floor(x0 / G) * G, ix1 = Math.ceil(x1 / G) * G;
     const iy0 = Math.floor(y0 / G) * G, iy1 = Math.ceil(y1 / G) * G;
     ctx.lineWidth = 1 / CV.cam.zoom;
-    ctx.strokeStyle = 'rgba(64,150,160,.058)';
+    ctx.strokeStyle = 'rgba(64,150,160,.030)';
     ctx.beginPath();
     for (let x = ix0; x <= ix1; x += G) { ctx.moveTo(x, y0); ctx.lineTo(x, y1); }
     for (let y = iy0; y <= iy1; y += G) { ctx.moveTo(x0, y); ctx.lineTo(x1, y); }
     ctx.stroke();
     // 每 5 格加亮
-    ctx.strokeStyle = 'rgba(94,234,212,.055)';
+    ctx.strokeStyle = 'rgba(94,234,212,.032)';
     ctx.lineWidth = 1.4 / CV.cam.zoom;
     ctx.beginPath();
     for (let x = Math.floor(ix0 / (G * 5)) * G * 5; x <= ix1; x += G * 5) { ctx.moveTo(x, y0); ctx.lineTo(x, y1); }
@@ -1230,33 +1549,122 @@ const DRAW = {
     ctx.stroke();
   },
 
-  stars(x0, y0, x1, y1) {
-    const ctx = CV.ctx;
-    const C = 240;
-    const cx0 = Math.floor(x0 / C), cx1 = Math.ceil(x1 / C);
-    const cy0 = Math.floor(y0 / C), cy1 = Math.ceil(y1 / C);
+  /* 屏幕空间的深空底景：不随相机移动，纯背景闪烁 */
+  deepSky(ctx, w, h) {
+    if (!this._deep) {
+      const arr = [];
+      let s = 20241107;
+      const rr = () => { s = (s * 1664525 + 1013904223) % 4294967296; return s / 4294967296; };
+      const PAL = ['255,214,170', '170,206,255', '212,180,255', '204,240,255'];
+      for (let i = 0; i < 520; i++) {
+        arr.push({
+          x: rr(), y: rr(),
+          r: 0.5 + rr() * 1.5,
+          phase: rr() * 6.2832,
+          speed: 0.22 + rr() * 1.9,
+          amp: 0.20 + rr() * 0.56,
+          ci: ((i * 2654435761) % 1000) / 1000,
+          big: rr() > 0.988,
+        });
+      }
+      // 颜色只决定 fillStyle 的批次，单颗亮度全部交给 globalAlpha，
+      // 这样每帧不再拼接上千个 rgba 字符串让浏览器解析。
+      for (let i = 0; i < arr.length; i++) {
+        const h0 = arr[i].ci;
+        arr[i].ci = h0 < 0.08 ? 0 : h0 < 0.2 ? 1 : h0 < 0.26 ? 2 : 3;
+      }
+      this._deep = arr;
+      this._deepPal = PAL;
+    }
+    const t = performance.now() / 1000;
+    const arr = this._deep, PAL = this._deepPal;
+    ctx.globalCompositeOperation = 'lighter';
+    let cur = -1;
+    for (let i = 0; i < arr.length; i++) {
+      const st = arr[i];
+      if (st.ci !== cur) { cur = st.ci; ctx.fillStyle = 'rgb(' + PAL[cur] + ')'; }
+      const x = st.x * w, y = st.y * h;
+      const tw = 0.5 + 0.5 * Math.sin(t * st.speed + st.phase);
+      const a = st.amp * (0.34 + 0.66 * tw);
+      if (st.big) {
+        ctx.globalAlpha = Math.min(1, a * 1.3);
+        ctx.fillRect(x - 0.55, y - 3.4, 1.1, 6.8);
+        ctx.fillRect(x - 3.4, y - 0.55, 6.8, 1.1);
+      }
+      ctx.globalAlpha = a;
+      ctx.fillRect(x - st.r * 0.5, y - st.r * 0.5, st.r, st.r);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+  },
+
+  /* 世界空间的星云：极淡的彩色雾，撑开空间的体积感 */
+  nebula(ctx, x0, y0, x1, y1) {
+    const C = 2600;
+    const cx0 = Math.floor(x0 / C) - 1, cx1 = Math.floor(x1 / C) + 1;
+    const cy0 = Math.floor(y0 / C) - 1, cy1 = Math.floor(y1 / C) + 1;
     ctx.globalCompositeOperation = 'lighter';
     for (let cx = cx0; cx <= cx1; cx++) {
       for (let cy = cy0; cy <= cy1; cy++) {
-        const n = 2;
-        for (let i = 0; i < n; i++) {
-          const hx = h2(cx * 7 + i, cy * 13 + i * 3);
-          const hy = h2(cx * 19 + i * 5, cy * 3 + i);
-          const px = cx * C + hx * C, py = cy * C + hy * C;
-          const b = 0.10 + h2(cx + i, cy - i) * 0.34;
-          const r = 0.7 + h2(cx - i, cy + i) * 1.5;
-          ctx.fillStyle = 'rgba(150,230,240,' + b.toFixed(3) + ')';
-          ctx.fillRect(px, py, r, r);
+        for (let i = 0; i < 2; i++) {
+          const px = (cx + h2(cx * 3 + i * 11, cy * 5 + i * 7)) * C;
+          const py = (cy + h2(cx * 13 + i, cy * 3 + i * 17)) * C;
+          const rad = 760 + h2(cx + i, cy + i) * 880;
+          const k = h2(cx - i, cy + i * 3);
+          const col = k < 0.4 ? '#3a2a63' : (k < 0.72 ? '#123c4a' : '#241c46');
+          drawGlow(ctx, px, py, rad, col, 0.080 + h2(cx, cy) * 0.045);
         }
       }
     }
     ctx.globalCompositeOperation = 'source-over';
   },
 
-  wells(ctx) {
+  /* 世界空间的近景星：有视差、有星等、各自闪烁 */
+  stars(x0, y0, x1, y1) {
+    const ctx = CV.ctx;
+    const C = 190;
+    const t = performance.now() / 1000;
+    const cx0 = Math.floor(x0 / C), cx1 = Math.floor(x1 / C);
+    const cy0 = Math.floor(y0 / C), cy1 = Math.floor(y1 / C);
+    ctx.globalCompositeOperation = 'lighter';
+    let curCol = '';
+    for (let cx = cx0; cx <= cx1; cx++) {
+      for (let cy = cy0; cy <= cy1; cy++) {
+        const n = 4 + Math.floor(h2(cx * 2 + 5, cy * 7 + 3) * 4);
+        for (let i = 0; i < n; i++) {
+          const px = cx * C + h2(cx * 7 + i, cy * 13 + i * 3) * C;
+          const py = cy * C + h2(cx * 19 + i * 5, cy * 3 + i) * C;
+          if (px < x0 || px > x1 || py < y0 || py > y1) continue;
+          const mag = h2(cx - i * 3, cy + i * 5);
+          const big = mag > 0.982;
+          const r = big ? 2.1 : 0.6 + h2(cx + i, cy - i) * 1.4;
+          const base = 0.12 + mag * 0.42;
+          const tw = 0.5 + 0.5 * Math.sin(t * (0.5 + h2(cx - i * 5, cy + i * 9) * 2.2) + h2(cx + i * 7, cy - i * 11) * 6.2832);
+          const a = base * (0.42 + 0.58 * tw) * (big ? 1.4 : 1);
+          const hue = h2(cx * 11 + i, cy * 17 - i);
+          const col = hue < 0.09 ? '255,222,186' : hue < 0.22 ? '168,204,255' : hue < 0.28 ? '206,178,255' : '170,236,246';
+          if (col !== curCol) { curCol = col; ctx.fillStyle = 'rgb(' + col + ')'; }
+          if (big) {
+            ctx.globalAlpha = Math.min(1, a * 0.75);
+            ctx.fillRect(px - 0.6, py - 3.6, 1.2, 7.2);
+            ctx.fillRect(px - 3.6, py - 0.6, 7.2, 1.2);
+          }
+          ctx.globalAlpha = a;
+          ctx.fillRect(px - r * 0.5, py - r * 0.5, r, r);
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+  },
+
+  // live = 玩家正在蓄力的井（来自 activeWells()）。它必须画出来，
+  // 否则按住左键时只剩一圈虚线，看不到那个正在成形的黑洞。
+  wells(ctx, live) {
     const t = W.time;
-    for (const w of W.wells) {
-      const grow = Math.min(1, w.t * 6);
+    const list = (live && live.length) ? W.wells.concat(live) : W.wells;
+    for (const w of list) {
+      const grow = w.live ? (0.45 + 0.55 * w.power) : Math.min(1, w.t * 6);
       const R = w.r * (0.55 + 0.45 * grow);
       ctx.globalCompositeOperation = 'lighter';
       // 外场光晕
@@ -1278,40 +1686,58 @@ const DRAW = {
         ctx.arc(0, 0, rr, rot + Math.PI, rot + Math.PI + 1.0 + i * 0.4);
         ctx.stroke();
       }
-      // 螺旋吸入线
-      ctx.strokeStyle = 'rgba(150,240,225,.20)';
-      ctx.lineWidth = 1.4 / CV.cam.zoom;
-      ctx.beginPath();
-      for (let i = 0; i < 7; i++) {
-        const ph = t * 2.2 + i * 0.9;
-        const rr = R * (0.95 - ((ph * 0.30) % 0.85));
-        const a = ph * 1.7;
-        const px = Math.cos(a) * rr, py = Math.sin(a) * rr;
-        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      // 螺旋吸入线：三条从外缘连续卷向中心的旋臂（旧版是几个离散点连成的折线，像个多边形）
+      ctx.strokeStyle = 'rgba(150,240,225,.24)';
+      ctx.lineWidth = 1.5 / CV.cam.zoom;
+      for (let arm = 0; arm < 3; arm++) {
+        const a0 = t * 1.9 + arm * (TAU / 3);
+        ctx.beginPath();
+        for (let i = 0; i <= 18; i++) {
+          const f = i / 18;
+          const rr = R * (0.97 - f * 0.66);
+          const a = a0 + f * 2.5;
+          const px = Math.cos(a) * rr, py = Math.sin(a) * rr;
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
       }
-      ctx.stroke();
       ctx.restore();
       ctx.globalCompositeOperation = 'source-over';
 
-      // 中心黑洞
-      const cg = ctx.createRadialGradient(w.x, w.y, 0, w.x, w.y, R * 0.36);
-      cg.addColorStop(0, 'rgba(0,0,0,1)');
-      cg.addColorStop(0.62, 'rgba(6,2,16,0.94)');
-      cg.addColorStop(1, 'rgba(40,10,70,0)');
-      ctx.fillStyle = cg;
-      ctx.beginPath();
-      ctx.arc(w.x, w.y, R * 0.40, 0, TAU);
-      ctx.fill();
-      // 中心亮核
+      // 中心黑洞：视界必须是纯黑的一块，外围再套一圈极亮的光子环。
+      // 旧版在正中心画了一个白色亮核，结果"黑洞"看着像颗发光的球，完全反了。
+      if (!this._hole) {
+        const HS = 192, hc = document.createElement('canvas');
+        hc.width = hc.height = HS;
+        const hg = hc.getContext('2d');
+        const cg = hg.createRadialGradient(HS / 2, HS / 2, 0, HS / 2, HS / 2, HS / 2);
+        cg.addColorStop(0, 'rgba(0,0,0,1)');
+        cg.addColorStop(0.50, 'rgba(0,0,0,1)');
+        cg.addColorStop(0.66, 'rgba(7,2,18,0.92)');
+        cg.addColorStop(0.83, 'rgba(28,8,58,0.40)');
+        cg.addColorStop(1, 'rgba(40,10,70,0)');
+        hg.fillStyle = cg;
+        hg.beginPath(); hg.arc(HS / 2, HS / 2, HS / 2, 0, TAU); hg.fill();
+        this._hole = hc;
+
+        const CS = 192, cc = document.createElement('canvas');
+        cc.width = cc.height = CS;
+        const cgx = cc.getContext('2d');
+        const c2 = cgx.createRadialGradient(CS / 2, CS / 2, 0, CS / 2, CS / 2, CS / 2);
+        c2.addColorStop(0, 'rgba(120,90,255,0)');
+        c2.addColorStop(0.56, 'rgba(120,90,255,0.05)');
+        c2.addColorStop(0.73, 'rgba(185,165,255,0.55)');
+        c2.addColorStop(0.81, 'rgba(225,248,255,0.92)');
+        c2.addColorStop(0.89, 'rgba(115,185,255,0.28)');
+        c2.addColorStop(1, 'rgba(60,20,140,0)');
+        cgx.fillStyle = c2;
+        cgx.fillRect(0, 0, CS, CS);
+        this._core = cc;
+      }
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.drawImage(this._hole, w.x - R, w.y - R, R * 2, R * 2);
       ctx.globalCompositeOperation = 'lighter';
-      const c2 = ctx.createRadialGradient(w.x, w.y, 0, w.x, w.y, R * 0.17);
-      c2.addColorStop(0, 'rgba(230,255,255,.95)');
-      c2.addColorStop(0.45, 'rgba(140,120,255,.5)');
-      c2.addColorStop(1, 'rgba(80,40,180,0)');
-      ctx.fillStyle = c2;
-      ctx.beginPath();
-      ctx.arc(w.x, w.y, R * 0.17, 0, TAU);
-      ctx.fill();
+      ctx.drawImage(this._core, w.x - R, w.y - R, R * 2, R * 2);
       ctx.globalCompositeOperation = 'source-over';
     }
   },
@@ -1578,8 +2004,10 @@ const DRAW = {
       if (p.x < x0 || p.x > x1 || p.y < y0 || p.y > y1) continue;
       const a = p.life / p.max;
       if (p.kind === 0) {
-        ctx.fillStyle = rgba(p.col, a * 0.9);
+        ctx.globalAlpha = a * 0.9;
+        ctx.fillStyle = p.col;
         ctx.beginPath(); ctx.arc(p.x, p.y, p.r * a, 0, TAU); ctx.fill();
+        ctx.globalAlpha = 1;
       } else if (p.kind === 1) {
         // 碎片
         ctx.save();
@@ -1634,10 +2062,13 @@ const DRAW = {
   },
 
   vignette(ctx, w, h) {
-    const g = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.42, w / 2, h / 2, Math.max(w, h) * 0.78);
-    g.addColorStop(0, 'rgba(0,0,0,0)');
-    g.addColorStop(1, 'rgba(0,0,0,.62)');
-    ctx.fillStyle = g;
+    if (!this._vig || this._vigW !== w || this._vigH !== h) {
+      const g = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.42, w / 2, h / 2, Math.max(w, h) * 0.78);
+      g.addColorStop(0, 'rgba(0,0,0,0)');
+      g.addColorStop(1, 'rgba(0,0,0,.62)');
+      this._vig = g; this._vigW = w; this._vigH = h;
+    }
+    ctx.fillStyle = this._vig;
     ctx.fillRect(0, 0, w, h);
   },
 
@@ -1649,7 +2080,7 @@ const DRAW = {
       const s = CV.toScreen(P.wellX, P.wellY);
       const R = P.wellR * (0.34 + 0.66 * P.charge) * CV.cam.zoom;
       ctx.setLineDash([6 / CV.cam.zoom, 7 / CV.cam.zoom]);
-      ctx.strokeStyle = 'rgba(220,200,255,' + (0.22 + P.charge * 0.42) + ')';
+      ctx.strokeStyle = 'rgba(220,200,255,' + (0.12 + P.charge * 0.32) + ')';
       ctx.lineWidth = 1.6;
       ctx.beginPath(); ctx.arc(s.x, s.y, R, 0, TAU); ctx.stroke();
       ctx.setLineDash([]);
@@ -2028,6 +2459,7 @@ function hurtPlayer(dmg, fromX, fromY) {
 function startCharge() {
   if (W.state !== 'play') return;
   if (P.charging) return;
+  if (P.chargeCd > 0) return;
   P.charging = true;
   P.charge = 0;
   P.chargeHold = 0;
@@ -2040,6 +2472,9 @@ function startCharge() {
 function releaseCharge() {
   if (!P.charging) return;
   P.charging = false;
+  // 防连点：两次塌缩之间至少隔 0.12 秒。疯狂点击原本会让每一帧都触发一次
+  // collapseWave（上千粒子 + 冲击波 + 音效），是肉眼可见的卡顿来源。
+  P.chargeCd = 0.12;
   const power = Math.max(0.10, P.charge);
   collapseWave(P.wellX, P.wellY, power);
   P.charge = 0;
@@ -2172,13 +2607,14 @@ function activeWells() {
       x: P.wellX, y: P.wellY,
       r: P.wellR * (0.34 + 0.66 * P.charge),
       pull: P.pull * (0.5 + 0.5 * P.charge),
+      t: 1, power: P.charge, live: true,
     });
   }
   if (P.twinWell) {
     const a = W.time * 1.9;
     out.push({
       x: P.x + Math.cos(a) * 74, y: P.y + Math.sin(a) * 74,
-      r: P.wellR * 0.44, pull: P.pull * 0.42, twin: true,
+      r: P.wellR * 0.44, pull: P.pull * 0.42, twin: true, t: 1, power: 0.55, live: true,
     });
   }
   return out;
@@ -2251,6 +2687,7 @@ function updatePlayer(dt) {
   P.fireT -= dt;
   if (P.fireT <= 0 && tgt) shoot();
 
+  if (P.chargeCd > 0) P.chargeCd -= dt;
   if (IN.mDown && !P.charging) startCharge();
   if (!IN.mDown && P.charging) releaseCharge();
 
@@ -2503,7 +2940,7 @@ function pickType(depth) {
 function spawnWave() {
   const cap = 70 + W.depth * 13;
   if (W.ents.length >= cap) return;
-  const n = 3 + Math.floor((W.depth - 1) * 1.0 + Math.random() * 2.2);
+  const n = 4 + Math.floor((W.depth - 1) * 1.0 + Math.random() * 2.2);
   // 成簇生成：一波敌人从同一侧涌入，形成'那边来了一群'的压迫感
   const a0 = Math.random() * TAU;
   for (let i = 0; i < n; i++) spawnAtEdge(pickType(W.depth), null, a0 + U.rnd(-0.55, 0.55));
@@ -2530,6 +2967,7 @@ function onDepthUp() {
   W.flash = Math.max(W.flash, 0.42);
   W.shake = 12;
     setTips('深度 <em>' + W.depth + '</em> · 空气变重了');
+  SFX.ambient.setDepth(W.depth);
   SFX.levelup();
   if (W.depth >= W.nextElite) { W.nextElite += 3; spawnElite(); }
 }
@@ -2545,10 +2983,8 @@ const TIPS_SEQ = [
 
 function updatePlay(dt) {
   // 开局引导：分四段把核心机制教会玩家，学会就走
-  if (G.tipStage < TIPS_SEQ.length) {
-    G.tipT += dt;
-    const cur = TIPS_SEQ[G.tipStage];
-    if (G.tipT >= cur[0]) { setTips(cur[1]); G.tipStage++; G.tipT = 0; }
+  if (G.tipStage < TIPS_SEQ.length && G.run.time >= TIPS_SEQ[G.tipStage][0]) {
+    setTips(TIPS_SEQ[G.tipStage][1]); G.tipStage++; G.tipT = 0;
   }
   const slowK = W.slow > 0 ? W.slowF : 1;
   if (W.slow > 0) W.slow -= dt;
@@ -2577,7 +3013,7 @@ function updatePlay(dt) {
   if (W.spawnT <= 0) {
     const ramp = Math.min(1, G.run.time / 25);
     const baseT = Math.max(0.15, 0.85 - W.depth * 0.14);
-    W.spawnT = baseT * (1.55 - 0.55 * ramp);
+    W.spawnT = baseT * (1.35 - 0.35 * ramp);
     spawnWave();
   }
 
@@ -2628,12 +3064,18 @@ const HUD = {
       e.xpfill.style.width = (xpPct * 100).toFixed(1) + '%';
     }
     if (this._c.lv !== P.lv) { this._c.lv = P.lv; e.lvNum.textContent = P.lv; }
+    // 蓄力条用 transform 而不是 width：按住左键时它每帧都在变，
+    // 改 width 会持续制造布局失效，transform 只走合成层、不触发重排。
     const ch = P.charging ? P.charge : 0;
     if (this._c.ch !== ch) {
       this._c.ch = ch;
+      e.gaugeFill.style.transform = 'scaleX(' + ch + ')';
+    }
+    const cp = P.charging ? Math.round(ch * 100) : 0;
+    if (this._c.cp !== cp || this._c.cOn !== P.charging) {
+      this._c.cp = cp; this._c.cOn = P.charging;
       e.gauge.classList.toggle('on', P.charging);
-      e.gaugeFill.style.width = (ch * 100).toFixed(0) + '%';
-      e.gaugeTxt.textContent = P.charging ? '引力积累 ' + Math.round(ch * 100) + '%' : '引力积累';
+      e.gaugeTxt.textContent = P.charging ? '引力积累 ' + cp + '%' : '引力积累';
     }
   },
   updateBuffs() {
@@ -2658,6 +3100,17 @@ function loop(now) {
   let dt = (now - G.last) / 1000;
   G.last = now;
   if (!isFinite(dt) || dt <= 0) dt = 1 / 60;
+  // 平滑帧率，供调试面板查看（真实浏览器里按反引号键打开）
+  G.fps = G.fps ? G.fps * 0.9 + (1 / Math.max(dt, 0.001)) * 0.1 : 1 / Math.max(dt, 0.001);
+  // 帧时间的尾部统计：平均帧率看不出卡顿，卡顿永远藏在 p95/max 里
+  const msRaw = dt * 1000;
+  if (!G.ft) G.ft = [];
+  G.ft.push(msRaw);
+  if (G.ft.length > 240) G.ft.shift();
+  if (msRaw > (G.worst || 0)) {
+    G.worst = msRaw;
+    G.worstInfo = W.state + ' e' + W.ents.length + ' p' + (W.parts || []).length + ' x' + (W.texts || []).length;
+  }
   dt = Math.min(dt, 0.05);
 
   const wp = CV.toWorld(IN.mx, IN.my);
@@ -2667,11 +3120,19 @@ function loop(now) {
   else idleUpdate(dt);
 
   HUD.tick();
-  DRAW.frame();
+  // 暂停与结算时画面本来就是静止的，不必再重绘整块画布（省下每帧的填充开销）
+  if (W.state !== 'pause' && W.state !== 'over' && W.state !== 'levelup') DRAW.frame();
 
-  if (G.dbgOn && G.dbg) {
+  if (G.dbgOn && G.dbg && (now - (G.dbgT || 0) > 200)) {
+    G.dbgT = now;
+    const ft = G.ft.slice().sort((a, b) => a - b);
+    const qf = p => ft.length ? ft[Math.min(ft.length - 1, Math.floor(ft.length * p))].toFixed(1) : '0.0';
+    let slowN = 0;
+    for (let i = 0; i < ft.length; i++) if (ft[i] > 20) slowN++;
     G.dbg.textContent =
-      'dpr ' + CV.dpr + ' | css ' + CV.w + 'x' + CV.h + ' | outer ' + outerWidth + 'x' + outerHeight + '\n' +
+      'fps ' + (G.fps | 0) + ' | dpr ' + CV.dpr.toFixed(2) + ' | css ' + CV.w + 'x' + CV.h + '\n' +
+      '帧 p50 ' + qf(0.5) + '  p95 ' + qf(0.95) + '  max ' + (ft.length ? ft[ft.length - 1].toFixed(1) : '0.0') + ' ms\n' +
+      '慢帧>20ms ' + slowN + '/' + ft.length + '  长任务 ' + (G.lt || 0) + '  最差 ' + (G.worst || 0).toFixed(1) + 'ms @' + (G.worstInfo || '-') + '\n' +
       'mouse ' + IN.mx.toFixed(0) + ',' + IN.my.toFixed(0) + '  world ' + IN.wx.toFixed(0) + ',' + IN.wy.toFixed(0) + '\n' +
       'cam ' + CV.cam.x.toFixed(0) + ',' + CV.cam.y.toFixed(0) + '  zoom ' + CV.cam.zoom.toFixed(2) + '\n' +
       'well ' + (P.wellX | 0) + ',' + (P.wellY | 0) + '  charge ' + P.charge.toFixed(2) +
@@ -2685,9 +3146,11 @@ function togglePause() {
     W.pauseFrom = W.state;
     W.state = 'pause';
     UI.only('pause');
+    SFX.ambient.duck(0.34);
   } else if (W.state === 'pause') {
     W.state = W.pauseFrom || 'play';
     UI.only(W.state === 'levelup' ? 'levelup' : null);
+    SFX.ambient.duck(1);
   }
 }
 
@@ -2795,6 +3258,11 @@ IN.onKey = function (k) {
     }
     if (k === 'KeyP') togglePause();
   }
+  if (k === 'KeyM') {
+    const m = SFX.toggleMute();
+    UI.toast(m ? '已静音 · 再按 M 恢复' : '声音已开启', 1400);
+    return;
+  }
   if (k === 'Escape') {
     if (W.state === 'play' || W.state === 'levelup') togglePause();
     else if (W.state === 'pause') togglePause();
@@ -2841,20 +3309,37 @@ function bindUI() {
     if (document.hidden && W.state === 'play') togglePause();
   });
 
-  // 触屏：按住屏幕即蓄力（移动端简化支持）
-  addEventListener('pointerdown', e => {
-    if (W.state !== 'play') return;
-    if (e.pointerType === 'touch') {
-      P.touchFiring = true;
-      IN.mDown = true;
-    }
-  });
-  addEventListener('pointerup', e => {
-    if (e.pointerType === 'touch' && P.touchFiring) {
-      P.touchFiring = false;
-      IN.mDown = false;
-    }
-  });
+  // 闪光开关（护眼）：全屏白闪对光敏感的人很不友好
+  const flashBtn = $('btnFlash');
+  if (flashBtn) {
+    const paintFlash = () => { flashBtn.textContent = '闪光 · ' + (SAVE.fx === 0 ? '关' : '开'); };
+    paintFlash();
+    flashBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      SAVE.fx = SAVE.fx === 0 ? 1 : 0;
+      saveGame(); paintFlash(); SFX.ui();
+      UI.toast(SAVE.fx === 0 ? '闪光效果已关闭' : '闪光效果已开启', 1300);
+    });
+  }
+
+  // 触屏暂停键（手机上没有 Esc）
+  const pauseBtn = $('pauseBtn');
+  if (pauseBtn) {
+    pauseBtn.addEventListener('pointerdown', e => {
+      e.preventDefault(); e.stopPropagation();
+      if (W.state === 'play' || W.state === 'levelup' || W.state === 'pause') togglePause();
+    });
+  }
+
+  // 触屏冲刺键
+  const dashBtn = $('dashBtn');
+  if (dashBtn) {
+    dashBtn.addEventListener('pointerdown', e => {
+      e.preventDefault(); e.stopPropagation();
+      SFX.resume();
+      if (W.state === 'play' && P.dashCdT <= 0 && P.dashT <= 0) doDash(IN.axis());
+    });
+  }
 }
 
 /* ---------------- 启动 ---------------- */
@@ -2863,6 +3348,13 @@ function boot() {
   UI.grab();
   CV.init();
   IN.init(CV.cv);
+  if (TOUCH) {
+    TIPS_SEQ[0][1] = '按住 <em>屏幕</em> 张开引力井 · 松手塌缩';
+    TIPS_SEQ[2][1] = '<em>左下摇杆</em> 移动 · <em>右下圆键</em> 冲刺 · 站在井里会被自己拖慢';
+    document.body.classList.add('touch');
+    JOY.init($('joy'), $('joyK'));
+    const lh = $('lvHint'); if (lh) lh.textContent = '点按卡片选择';
+  }
   Object.assign(P, makePlayer());
   P.evos = {};
   bindUI();
@@ -2874,13 +3366,23 @@ function boot() {
     'border-radius:6px;pointer-events:none;display:none;white-space:pre';
   document.body.appendChild(dbg);
   G.dbg = dbg;
+  G.lt = 0;
+  try {
+    new PerformanceObserver(function (list) { G.lt += list.getEntries().length; })
+      .observe({ entryTypes: ['longtask'] });
+  } catch (e) { }
+
+  // 浏览器要求音频必须由用户手势唤醒：只注册一次，绝不能放进 resume()
+  // 里面（那样每次点击都会新增监听器，数量指数增长，几秒内浏览器直接卡死）
+  addEventListener('pointerdown', () => SFX.resume(), { once: true });
+  addEventListener('keydown', () => SFX.resume(), { once: true });
 
   // 调试句柄（不影响正常游玩；供自动化测试与调参）
   window.__C = {
-    P, W, CV, IN, G, SAVE, CONF, EVO, META, ENEMY_TYPES,
+    P, W, CV, IN, G, SAVE, CONF, EVO, META, ENEMY_TYPES, SFX, DRAW, U,
     startRun, endRun, chooseCard, openLevelUp, collapseWave,
     startCharge, releaseCharge, xpNeed, depthOf, renderMeta, toMenu,
-    renderCards, UI,
+    renderCards, UI, JOY, TOUCH, doDash,
   };
   updateMenuStats();
   UI.only('menu');
@@ -2893,6 +3395,10 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
 } else {
   boot();
+
+/* 浏览器要求音频必须由用户手势唤醒：任意一次交互就点亮整个声场 */
+addEventListener('pointerdown', () => SFX.resume(), { once: true });
+addEventListener('keydown', () => SFX.resume(), { once: true });
 }
 
 
