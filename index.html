@@ -350,6 +350,23 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0;
 #pause h2{font-size:22px;letter-spacing:.4em;margin-bottom:6px;margin-left:.4em}
 #pause p{font-size:12px;color:#61798a;letter-spacing:.1em;margin-bottom:20px;font-family:var(--mono)}
 #pause .pr{display:flex;gap:10px;justify-content:center}
+/* ============ 竖屏适配 ============ */
+@media (orientation:portrait){
+  /* 竖屏时三张牌横排会挤成一线，改成竖排单列 */
+  #lvCards{flex-direction:column;gap:9px;max-width:min(380px,88vw)}
+  .card{width:100%;min-height:0;padding:13px 16px}
+  .card .fx{margin-top:7px}
+  .card .t{font-size:15px}
+  #lvHead .big{font-size:12px;letter-spacing:.38em}
+  #menu .t1{font-size:clamp(44px,15vw,80px)}
+  #menu .row{flex-wrap:wrap;justify-content:center;gap:9px}
+  #tips{bottom:104px;font-size:12px;letter-spacing:.14em}
+  #chain{top:65%}
+  #blast{top:38%;font-size:40px}
+  #over .stats{grid-template-columns:1fr 1fr}
+  #rotate{display:none!important}
+}
+
 /* ============ 触屏适配 ============ */
 #joy,#dashBtn{display:none}
 .touchOnly{display:none}
@@ -1077,6 +1094,15 @@ const CV = {
     // 画布铺满全屏且 position:fixed，位置只在 resize 时可能变化。
     // 缓存下来，避免 pointermove 高频读取时触发强制同步重排。
     this.rect = this.cv.getBoundingClientRect();
+    /*
+      镜头缩放：按屏幕**短边**反推，而不是固定倍数。
+      短边 640 个世界单位是一个手感良好的基准：小屏自动拉远、大屏自动拉近。
+      竖屏时再多拉 25%，因为竖屏横向天生就窄，不拉远会被敌人包围到看不见。
+    */
+    this.portrait = this.h > this.w * 1.12;
+    let z = Math.min(this.w, this.h) / 640;
+    if (this.portrait) z *= 0.76;
+    this.baseZoom = Math.max(0.44, Math.min(1, z));
   },
   toWorld(sx, sy) {
     return {
@@ -1381,7 +1407,17 @@ function makeEnemy(type, x, y, extra) {
 }
 function spawnAtEdge(type, extra, ang) {
   if (ang === undefined) ang = Math.random() * TAU;
-  const dist = Math.min(CV.w, CV.h) * 0.46 + U.rnd(20, 90);
+  /*
+    生成距离必须按**当前视野**算，而不是按屏幕像素算。
+    早期写成 Math.min(CV.w,CV.h)*0.46，dist 是世界单位、CV.w 是 CSS 像素，
+    zoom 一旦小于 1（手机端）敌群就会直接在画面中间凭空出现。
+    这里沿 ang 方向求椭圆边界半径，再往外推一点，保证真在画面外。
+  */
+  const zm = CV.cam.zoom || 1;
+  const hw = Math.max(1, CV.w / 2 / zm), hh = Math.max(1, CV.h / 2 / zm);
+  const ca = Math.cos(ang), sa = Math.sin(ang);
+  const dEdge = 1 / Math.max(1e-4, Math.hypot(ca / hw, sa / hh));
+  const dist = dEdge * 1.04 + U.rnd(20, 80);
   const x = P.x + Math.cos(ang) * dist;
   const y = P.y + Math.sin(ang) * dist;
   const e = makeEnemy(type, x, y, extra);
@@ -1445,6 +1481,8 @@ function camUpdate(dt) {
   const k = 1 - Math.pow(0.0016, dt);
   CV.cam.x = U.lerp(CV.cam.x, tx, k);
   CV.cam.y = U.lerp(CV.cam.y, ty, k);
+  // 手机横竖切换、桌面拖窗口都会改变 CV.baseZoom，这里每帧对齐一次
+  if (W.baseZoom !== CV.baseZoom) { W.baseZoom = CV.baseZoom; W.zoomT = CV.baseZoom; }
   W.zoom = U.lerp(W.zoom, W.zoomT, 1 - Math.pow(0.001, dt));
   CV.cam.zoom = W.zoom;
 }
@@ -2128,7 +2166,7 @@ function resetWorld() {
   W.ents.length = 0; W.bullets.length = 0; W.orbs.length = 0;
   W.parts.length = 0; W.texts.length = 0; W.wells.length = 0; W.shocks.length = 0;
   W.spawnT = 0.8; W.eliteT = 0; W.nextElite = 3;
-  W.baseZoom = TOUCH ? 0.72 : 1;
+  W.baseZoom = CV.baseZoom;
   W.zoom = W.baseZoom; W.zoomT = W.baseZoom;
   G.delayed.length = 0;
 }
@@ -2940,9 +2978,11 @@ function pickType(depth) {
 }
 
 function spawnWave() {
-  const cap = 70 + W.depth * 13;
+  // 竖屏视野大得多，人口密度不跟上就会空荡荡的
+  const dens = CV.portrait ? 1.45 : 1;
+  const cap = Math.round((70 + W.depth * 13) * dens);
   if (W.ents.length >= cap) return;
-  const n = 4 + Math.floor((W.depth - 1) * 1.0 + Math.random() * 2.2);
+  const n = Math.round((4 + Math.floor((W.depth - 1) * 1.0 + Math.random() * 2.2)) * (CV.portrait ? 1.2 : 1));
   // 成簇生成：一波敌人从同一侧涌入，形成'那边来了一群'的压迫感
   const a0 = Math.random() * TAU;
   for (let i = 0; i < n; i++) spawnAtEdge(pickType(W.depth), null, a0 + U.rnd(-0.55, 0.55));
