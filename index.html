@@ -115,6 +115,23 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0;
   font-family:var(--mono);
 }
 #depth b{color:var(--violet)}
+#runGoal{margin-top:5px;font:10px/1.4 var(--mono);letter-spacing:.08em;color:#8299aa;white-space:nowrap}
+#bossHud{position:absolute;left:50%;top:86px;transform:translateX(-50%);width:min(340px,42vw);z-index:3;text-align:center;pointer-events:none}
+#bossLabel{font:10px/1.4 var(--mono);letter-spacing:.24em;color:#ff9aaa;margin-bottom:5px;text-shadow:0 1px 8px #000}
+#bossTrack{height:7px;border-radius:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,130,150,.32);overflow:hidden;box-shadow:0 3px 16px #000}
+#bossFill{height:100%;width:100%;background:linear-gradient(90deg,#a42e50,#ff718d);box-shadow:0 0 12px rgba(255,90,120,.65);transition:width .12s linear}
+#chalHud{
+  display:flex;align-items:center;gap:8px;margin-top:7px;
+  padding:5px 10px;border-radius:8px;
+  background:rgba(88,28,135,.34);border:1px solid rgba(192,132,252,.34);
+  font:10px/1 var(--mono);letter-spacing:.12em;color:#e9d5ff;
+  box-shadow:0 0 18px -6px rgba(192,132,252,.6);
+}
+#chalHud.hide{display:none}
+#chalHud .bar{width:74px;height:4px;border-radius:2px;background:rgba(255,255,255,.14);overflow:hidden}
+#chalFill{width:100%;height:100%;background:linear-gradient(90deg,#a78bfa,#e9d5ff);transform-origin:left center;transform:scaleX(0)}
+#chalTime{color:#c4b5fd;min-width:26px;text-align:right}
+
 #rightTop{text-align:right;min-width:110px}
 #killNum{font-family:var(--mono);font-size:22px;font-weight:600;color:#cfe9e9;line-height:1}
 #killLbl{font-size:10px;letter-spacing:.28em;color:#546b7a;margin-top:5px;font-family:var(--mono)}
@@ -147,6 +164,8 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0;
 #gaugeBar{width:190px;height:4px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
 #gaugeFill{height:100%;width:100%;transform:scaleX(0);transform-origin:left center;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 14px var(--cyan);will-change:transform}
 #gaugeTxt{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:#7fa3b3}
+#gaugeTxt{max-width:min(420px,90vw);white-space:nowrap;text-align:center;text-shadow:0 1px 8px #000}
+@media(max-width:600px){#gaugeTxt{font-size:9px;letter-spacing:.08em}#runGoal{font-size:9px}#bossHud{top:82px;width:min(300px,58vw)}}
 
 #tips{
   position:absolute;left:50%;bottom:86px;transform:translateX(-50%);
@@ -157,6 +176,21 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0;
 #tips em{color:var(--cyan);font-style:normal}
 
 /* 连锁提示（独立层，带弹出动画） */
+#perfect{
+  position:absolute;left:50%;top:29%;transform:translate(-50%,-50%) scale(.82);
+  font:800 34px/1 var(--mono);letter-spacing:.16em;color:#ffe9a8;
+  -webkit-text-stroke:1.4px rgba(90,50,0,.9);
+  text-shadow:0 0 18px rgba(251,210,91,.9),0 0 44px rgba(251,166,60,.55),0 4px 18px rgba(0,0,0,.95);
+  opacity:0;pointer-events:none;white-space:nowrap;z-index:7}
+#perfect.go{animation:perfectPop .82s cubic-bezier(.2,1.3,.36,1) both}
+@keyframes perfectPop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}
+  16%{opacity:1;transform:translate(-50%,-50%) scale(1.16)}
+  28%{transform:translate(-50%,-50%) scale(1)}
+  74%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-54%) scale(1.04)}
+}
+
 #chain{
   position:absolute;left:50%;top:69%;transform:translate(-50%,-50%) scale(.6);
   font-family:var(--mono);font-weight:800;font-size:31px;letter-spacing:.04em;
@@ -271,7 +305,18 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0;
   font-size:32px;font-weight:800;letter-spacing:.3em;color:#ff8ea3;
   text-shadow:0 0 40px rgba(251,113,133,.5);margin-left:.3em;
 }
+#over.victory{background:radial-gradient(circle at 50% 40%,rgba(12,55,54,.72),rgba(2,3,7,.96) 70%)}
+#over.victory #overTitle{color:#8ff5df;text-shadow:0 0 40px rgba(94,234,212,.55)}
+#over.victory #overSub{color:#4e968e}
 #overSub{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:#6d4b55;margin-top:9px}
+#ovBuild{
+  font:11px/1.5 var(--mono);letter-spacing:.1em;color:#7f96a6;
+  text-align:center;margin:-6px 0 14px;padding:9px 12px;
+  background:rgba(94,234,212,.055);border:1px solid rgba(94,234,212,.16);border-radius:9px;
+}
+#ovBuild b{color:#8ff5df;font-size:14px;letter-spacing:.1em;margin:0 4px}
+#ovBuild span{display:block;margin-top:4px;color:#5d7385;font-size:10px;letter-spacing:.04em}
+
 #overStats{
   display:grid;grid-template-columns:1fr 1fr;gap:1px;margin:24px 0 20px;
   background:rgba(255,255,255,.07);border-radius:11px;overflow:hidden;
@@ -367,6 +412,149 @@ canvas#cv{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0;
   #rotate{display:none!important}
 }
 
+
+/* ============ 井形态指示 ============ */
+#wellMode {
+  position: fixed; left: 50%; bottom: 88px; transform: translateX(-50%);
+  z-index: 40; pointer-events: none;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .22em;
+  color: #5eead4; border: 1px solid rgba(94,234,212,.4);
+  border-radius: 999px; padding: 3px 12px;
+  background: rgba(6,20,26,.72);
+  transition: color .2s, border-color .2s;
+}
+body.touch #wellMode { display: none; }
+
+
+
+
+#codexGrid .cxCard.fused { border-color: rgba(251,210,91,.34); background: rgba(251,210,91,.045); }
+#codexGrid .cxCard.fused b { color: #fbd25b; }
+#codexGrid .cxIc { color: #fbd25b; font-size: 14px; width: 18px; text-align: center; }
+#verTag { color: #5eead4; letter-spacing: .1em; }
+
+/* ============ 熔炼 ============ */
+#fuseBox {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  flex-wrap: wrap; margin: 10px auto 0; padding: 0 14px;
+  font-family: var(--mono); font-size: 11.5px;
+}
+#fuseBox .lbl { color: #3f515f; letter-spacing: .24em; }
+#fuseBox .hint { color: #3b4c59; font-size: 11px; }
+#fuseBox .fz {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  background: rgba(251,210,91,.06); border: 1px solid rgba(251,210,91,.30);
+  color: #d6e8f2; border-radius: 999px; padding: 5px 13px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em;
+  transition: background .18s, border-color .18s, transform .18s;
+}
+#fuseBox .fz i { font-style: normal; opacity: .82; }
+#fuseBox .fz .ar { opacity: .5; }
+#fuseBox .fz i.out { color: #fbd25b; opacity: 1; }
+#fuseBox .fz b { color: #fbd25b; font-weight: 600; }
+#fuseBox .fz:hover {
+  background: rgba(251,210,91,.14); border-color: rgba(251,210,91,.62);
+  transform: translateY(-1px);
+}
+
+/* ============ 每日契约 ============ */
+#dailyBar {
+  display: flex; align-items: center; gap: 10px; justify-content: center;
+  margin: 12px auto 0; font-family: var(--mono); font-size: 11.5px;
+  letter-spacing: .06em; flex-wrap: wrap; padding: 0 14px;
+}
+#dailyBar .lbl { color: #3f515f; letter-spacing: .24em; }
+#dailyBar .nm {
+  color: #c4b5fd; border: 1px solid rgba(196,181,253,.34);
+  border-radius: 999px; padding: 3px 10px; background: rgba(196,181,253,.07);
+}
+#dailyBar .ds { color: #61798a; }
+
+/* ============ 遗物栏 ============ */
+#relicBar {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  margin: 18px auto 0; max-width: 620px; padding: 0 12px;
+  font-family: var(--mono);
+}
+#relicBar .rl {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; letter-spacing: .06em;
+  color: #ffe9a8; background: rgba(251,210,91,.07);
+  border: 1px solid rgba(251,210,91,.28); border-radius: 999px;
+  padding: 5px 12px 5px 9px; cursor: default;
+}
+#relicBar .rl i {
+  font-style: normal; font-size: 13px; color: #fbd25b;
+  text-shadow: 0 0 10px rgba(251,210,91,.7);
+}
+#relicBar .empty {
+  font-size: 11px; letter-spacing: .05em; color: #3f515f;
+}
+
+/* ============ 狂热 / 评级 ============ */
+#frenzy {
+  position: fixed; left: 50%; top: 22%; transform: translate(-50%, 0) scale(.9);
+  z-index: 46; pointer-events: none; opacity: 0;
+  font-size: 40px; font-weight: 700; letter-spacing: .34em; color: #ffe9a8;
+  text-shadow: 0 0 26px rgba(251,191,36,.85), 0 0 70px rgba(251,191,36,.42), 0 3px 10px rgba(0,0,0,.9);
+  -webkit-text-stroke: 1.4px rgba(2,6,12,.92);
+}
+#frenzy .sub {
+  display: block; margin-top: 4px; font-size: 12px; letter-spacing: .5em;
+  color: rgba(255,233,168,.72); -webkit-text-stroke: 0;
+  text-shadow: 0 2px 8px rgba(0,0,0,.9);
+}
+#frenzy.go { animation: frenzyGo .9s cubic-bezier(.22,1.4,.4,1) forwards; }
+@keyframes frenzyGo {
+  0%   { opacity: 0; transform: translate(-50%, 14px) scale(.82); }
+  26%  { opacity: 1; transform: translate(-50%, 0) scale(1.06); }
+  64%  { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -18px) scale(1.02); }
+}
+#ovGrade { font-size: 26px; letter-spacing: .1em; font-weight: 700; }
+
+/* ============ 档案 ============ */
+#codex { background: #05080e; align-items: center; justify-content: center; padding: 16px; }
+#codexBox {
+  width: 88vw; max-width: 780px; max-height: 88vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 22px 24px 16px; height: auto;
+}
+#codexHead { text-align: center; margin-bottom: 14px; }
+#codexHead h2 { font-size: 22px; letter-spacing: .5em; margin: 0 0 6px 4px; color: #eafffb; }
+#codexSub { font-size: 12px; color: #6f8b9c; letter-spacing: .08em; }
+#codexTabs { display: flex; gap: 8px; margin-bottom: 12px; }
+.cxTab {
+  font: inherit; font-size: 12px; letter-spacing: .16em; cursor: pointer;
+  padding: 6px 16px; border-radius: 8px; color: #7d97a6;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(94,234,212,.12);
+  transition: all .18s ease;
+}
+.cxTab.on { color: #eafffb; background: rgba(94,234,212,.13); border-color: rgba(94,234,212,.44); }
+#codexGrid {
+  width: 100%; display: grid; gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
+  overflow-y: auto; padding: 2px 4px 6px;
+  flex: 0 1 auto; max-height: 62vh;
+}
+.cxCard {
+  border: 1px solid rgba(94,234,212,.15); border-radius: 9px;
+  padding: 9px 11px 10px; background: rgba(94,234,212,.038);
+}
+.cxCard.lock { opacity: .3; border-color: rgba(255,255,255,.06); background: rgba(255,255,255,.015); }
+.cxCard .h { display: flex; align-items: baseline; }
+.cxCard b { font-size: 13px; letter-spacing: .1em; color: #dff7f3; }
+.cxCard i { font-style: normal; font-size: 10px; color: #5f7b8c; margin-left: auto; letter-spacing: .06em; }
+.cxCard p { margin: 5px 0 0; font-size: 11px; line-height: 1.55; color: #86a3b3; }
+.cxDot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+#codexFoot { margin-top: 14px; }
+
+@media (max-width: 620px) {
+  #codexGrid { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); max-height: 58vh; }
+  #codexHead h2 { font-size: 19px; letter-spacing: .4em; }
+  .cxCard p { font-size: 10.5px; }
+}
+
 /* ============ 触屏适配 ============ */
 #joy,#dashBtn{display:none}
 .touchOnly{display:none}
@@ -456,12 +644,19 @@ body.touch #dashBtn.cd{opacity:.30}
       <div id="centerTop">
         <div id="clock">0:00</div>
         <div id="depth">深度 <b>1</b></div>
+        <div id="runGoal">目标 · 抵达深度 6</div>
+        <div id="chalHud" class="hide">
+          <span id="chalNm">收割</span>
+          <div class="bar"><div id="chalFill"></div></div>
+          <span id="chalTime">20.0</span>
+        </div>
       </div>
       <div id="rightTop">
         <div id="killNum">0</div>
         <div id="killLbl">已湮灭</div>
       </div>
     </div>
+    <div id="bossHud" class="hide"><div id="bossLabel">终点守卫 · 核心吞噬者</div><div id="bossTrack"><div id="bossFill"></div></div></div>
     <div id="buffs"></div>
     <div id="gauge">
       <div id="gaugeBar"><div id="gaugeFill"></div></div>
@@ -470,6 +665,8 @@ body.touch #dashBtn.cd{opacity:.30}
   <div id="tips"></div>
   <div id="chain"></div>
   <div id="blast"></div>
+  <div id="frenzy">狂 热<span class="sub">引力过载</span></div>
+  <div id="perfect">完美奇点</div>
     <div id="xpwrap">
       <div id="lvbadge">LV <b id="lvNum">1</b></div>
       <div id="xpbar"><div id="xpfill"></div></div>
@@ -491,6 +688,10 @@ body.touch #dashBtn.cd{opacity:.30}
       <div class="row">
         <button class="btn ghost small" id="btnMeta">核心室</button>
         <button class="btn ghost small" id="btnHelp">操作说明</button>
+        <button class="btn ghost small" id="btnCodex">档案</button>
+        <button class="btn ghost small" id="btnHeat">挑战 · 关闭</button>
+        <button class="btn ghost small" id="btnDaily">今日契约</button>
+        <button class="btn ghost small" id="btnInput">操作 · 自动</button>
         <button class="btn ghost small" id="btnFlash">闪光 · 开</button>
       </div>
     </div>
@@ -500,7 +701,11 @@ body.touch #dashBtn.cd{opacity:.30}
       <div><b id="stRuns">0</b>下潜次数</div>
       <div><b id="stCry">0</b>结晶存量</div>
     </div>
-    <div class="foot">建议全屏 · 鼠标左右手皆可 · 存档自动保存在本机</div>
+    <div id="relicBar"></div>
+    <div id="fuseBox"></div>
+    <div id="dailyBar"></div>
+    <div id="wellMode">透镜</div>
+    <div class="foot"><span id="verTag">v13</span> · 建议全屏 · 鼠标左右手皆可 · 存档自动保存在本机</div>
   </div>
 
   <!-- ============ 升级三选一 ============ -->
@@ -523,11 +728,16 @@ body.touch #dashBtn.cd{opacity:.30}
         <div><span>湮灭数</span><b id="ovKills">0</b></div>
         <div><span>最终深度</span><b id="ovDepth">1</b></div>
         <div class="hi"><span>本局结晶</span><b id="ovCry">0</b></div>
+        <div class="hi"><span>评定</span><b id="ovGrade">D</b></div>
+      <div class="hi" id="ovHeatRow"><span>挑战</span><b id="ovHeat">—</b></div>
+      <div class="hi"><span>深渊</span><b id="ovDeep">—</b></div>
       </div>
+      <div id="ovBuild"></div>
       <div id="ovEvos"></div>
       <div id="gainLine">结晶 <b id="gsCry">0</b> · 已存入核心室</div>
       <div id="unlockLine"></div>
-      <div style="display:flex;gap:10px;justify-content:center">
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="btn" id="btnDeeper" style="display:none">继续深入</button>
         <button class="btn" id="btnAgain">再 下 潜 一 次</button>
         <button class="btn ghost small" id="btnToMenu">返回</button>
       </div>
@@ -553,6 +763,23 @@ body.touch #dashBtn.cd{opacity:.30}
     </div>
   </div>
 
+  <!-- ============ 档案 ============ -->
+  <div id="codex" class="screen hide">
+    <div id="codexBox" class="glass">
+      <div id="codexHead">
+        <h2>档 案</h2>
+        <div id="codexSub">尚未记录</div>
+      </div>
+      <div id="codexTabs">
+        <button class="cxTab on" data-tab="enemy">敌 人</button>
+        <button class="cxTab" data-tab="evo">演 化</button>
+        <button class="cxTab" data-tab="relic">遗 物</button>
+      </div>
+      <div id="codexGrid"></div>
+      <div id="codexFoot"><button class="btn small" id="btnCodexBack">返回</button></div>
+    </div>
+  </div>
+
   <!-- ============ 帮助 ============ -->
   <div id="help" class="screen hide">
     <div class="glass" style="max-width:600px;padding:30px 34px">
@@ -574,7 +801,7 @@ body.touch #dashBtn.cd{opacity:.30}
         <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
           <b style="color:var(--cyan)">核心技巧：</b>蓄力时你会变慢，井会变大。<br />
           吸得越多，塌缩越狠——但吸住的敌人也会涌向你。<br />
-          <b style="color:var(--gold)">忍到最后一刻再松手。</b><br /><span style="color:#61798a">快捷键：<span class="kbd">Esc</span> 暂停 · <span class="kbd">M</span> 静音 · <span class="kbd">`</span> 调试信息</span>
+          <b style="color:var(--gold)">忍到最后一刻再松手。</b><br />抵达深度 6，击败终点守卫，完成本次下潜。<br /><span style="color:#61798a">快捷键：<span class="kbd">Esc</span> 暂停 · <span class="kbd">M</span> 静音 · <span class="kbd">`</span> 调试信息</span>
         </div>
       </div>
       <div style="margin-top:22px;text-align:right">
@@ -652,11 +879,16 @@ const DEFAULT_SAVE = {
   meta: {},           // 已解锁的永久演化 id -> true
   seen: {},           // 已见过的演化（用于图鉴）
   maxCombo: 0,
+  deepestLoop: 1,      // 通关过的最高深渊层数（周目）
   firstRunDone: false,
+  heat: 0,
   fx: 1,               // 1 = 全屏闪光效果开启，0 = 关闭（护眼）
+  input: 'auto',       // 'auto' | 'touch' | 'mouse'：操作方式，影响摇杆/冲刺键是否出现
+  relics: [],          // 已携带的遗物 id（跨局传承，死亡不掉）
+  relicSlot: 4,        // 遗物栏位上限，可由核心室扩充
 };
 const SAVE = Object.assign({}, DEFAULT_SAVE, {
-  meta: {}, seen: {},
+  meta: {}, seen: {}, relics: [],
 });
 function loadSave() {
   try {
@@ -922,8 +1154,19 @@ const SFX = {
 /* ---------------- 触屏输入 ---------------- */
 const TOUCH = (function () {
   try {
-    if (/[?&]touch\b/.test(location.search)) return true;
-    return matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
+    const q = location.search;
+    if (/[?&]touch\b/.test(q)) return true;   // 强制触屏（调试用）
+    if (/[?&]mouse\b/.test(q)) return false;  // 强制键鼠
+    const pref = (SAVE && SAVE.input) || 'auto';
+    if (pref === 'touch') return true;
+    if (pref === 'mouse') return false;
+    /*
+      自动判定必须同时满足：主输入是手指（pointer: coarse）
+      **且** 不能悬停（hover: none）。
+      只看 navigator.maxTouchPoints 的话，带触摸屏的 Windows 笔记本会被误判成手机，
+      桌面上就会出现摇杆和冲刺按钮。那类机器的 pointer 是 fine 的。
+    */
+    return !!(matchMedia('(pointer: coarse)').matches && matchMedia('(hover: none)').matches);
   } catch (e) { return false; }
 })();
 
@@ -1036,8 +1279,11 @@ const UI = {
     ['cv', 'hud', 'menu', 'levelup', 'over', 'meta', 'help', 'pause', 'toast',
       'hpFill', 'hpText', 'clock', 'depth', 'killNum', 'xpfill', 'lvNum', 'buffs',
       'gauge', 'gaugeFill', 'gaugeTxt', 'tips', 'chain', 'blast', 'lvCards', 'lvHead',
+      'runGoal', 'chalHud', 'chalNm', 'chalFill', 'chalTime', 'bossHud', 'bossFill', 'perfect', 'btnDeeper', 'ovBuild',
       'ovTime', 'ovKills', 'ovDepth', 'ovCry', 'gsCry', 'unlockLine', 'gainLine', 'ovEvos',
-      'metaList', 'cryNum', 'metaStat', 'stBest', 'stKills', 'stRuns', 'stCry', 'btnFlash',
+      'metaList', 'cryNum', 'metaStat', 'stBest', 'stKills', 'stRuns', 'stCry', 'btnFlash', 'btnInput', 'btnDaily', 'fuseBox', 'btnHeat',
+    'codex', 'codexGrid', 'codexSub', 'btnCodex', 'btnCodexBack', 'codexTabs',
+    'frenzy', 'ovGrade', 'relicBar', 'wellMode', 'dailyBar', 'ovHeatRow', 'ovHeat', 'ovDeep',
       'joy', 'joyK', 'dashBtn', 'pauseBtn'
     ].forEach(id => this.el[id] = $(id));
   },
@@ -1048,7 +1294,7 @@ const UI = {
     const e = this.el[name]; if (e) e.classList.add('hide');
   },
   only(name) {
-    ['menu', 'levelup', 'over', 'meta', 'help', 'pause'].forEach(n => {
+    ['menu', 'levelup', 'over', 'meta', 'help', 'pause', 'codex'].forEach(n => {
       if (n !== name) this.hide(n);
     });
     if (name) this.show(name);
@@ -1153,6 +1399,8 @@ const ENEMY_TYPES = {
   orbiter:  { nm: '环子',   r: 13, hp: 40,  spd: 106,  dmg: 9,  xp: 3,  col: '#c084fc', kind: 'orbit' },
   shard:    { nm: '碎屑',   r: 8,  hp: 13,  spd: 142, dmg: 5,  xp: 1,  col: '#fbd25b', kind: 'basic' },
   elite:    { nm: '吞噬者', r: 34, hp: 560, spd: 64,  dmg: 26, xp: 40, col: '#ff5f7a', kind: 'elite' },
+  anchor:   { nm: '锚体', r: 17, hp: 190, spd: 52,  dmg: 20, xp: 5,  col: '#94a3b8', kind: 'anchor' },
+  bomber:   { nm: '爆裂', r: 13, hp: 42,  spd: 138, dmg: 0,  xp: 4,  col: '#fb923c', kind: 'bomber' },
 };
 
 /* 按深度决定出怪构成 */
@@ -1162,6 +1410,8 @@ function spawnMix(depth) {
   if (depth >= 3) pool.push(['splitter', 26]);
   if (depth >= 4) pool.push(['shooter', 20]);
   if (depth >= 5) pool.push(['orbiter', 22]);
+  if (depth >= 3) pool.push(['anchor', 16]);
+  if (depth >= 4) pool.push(['bomber', 20]);
   return pool;
 }
 function depthScale(depth) {
@@ -1174,6 +1424,14 @@ function depthScale(depth) {
   };
 }
 const depthOf = t => 1 + Math.floor(t / 38);
+// 深渊层数用罗马数字，比纯数字更有“穿越多少重宇宙”的量级感
+const ROMAN = n => {
+  n = Math.max(1, Math.min(50, n | 0));
+  const t = [[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+  let out = '';
+  for (const [v, sym] of t) { while (n >= v) { out += sym; n -= v; } }
+  return out;
+};
 const xpNeed = lv => Math.floor(4 + lv * 2 + Math.pow(lv, 1.5) * 0.65);
 
 /* ---------- 演化池（局内三选一） ----------
@@ -1197,6 +1455,9 @@ const EVO = [
   { id: 'collapse', n: '内爆', ic: '✹', cat: 'G', rar: 1, max: 6, d: '塌缩伤害 +24%', apply: p => p.collapseDmg *= 1.24 },
   { id: 'charge', n: '蓄能矩阵', ic: '◐', cat: 'G', rar: 1, max: 4, d: '蓄力速度 +26%', apply: p => p.chargeSpd *= 1.26 },
   { id: 'blast', n: '冲击半径', ic: '◉', cat: 'G', rar: 2, max: 4, d: '塌缩爆炸范围 +22%', apply: p => p.blastR *= 1.22 },
+  { id: 'aftershock', n: '余震协议', ic: '〰', cat: 'G', rar: 2, max: 3, d: '塌缩后在井心引爆余震，造成 28% 起、每层再增 10% 的塌缩伤害', apply: p => p.afterShock++ },
+  { id: 'volley', n: '裂星编队', ic: '✦', cat: 'W', rar: 2, max: 3, d: '每 5 / 4 / 3 次自动射击，额外发射一枚追踪弹', apply: p => p.volley++ },
+  { id: 'dashPulse', n: '相位爆震', ic: '⟡', cat: 'S', rar: 2, max: 3, d: '冲刺起点释放脉冲，伤害并击退附近敌人', apply: p => p.dashPulse++ },
   { id: 'dot', n: '潮汐撕裂', ic: '☄', cat: 'G', rar: 2, max: 3, d: '引力井内的敌人每秒受到灼伤', apply: p => p.wellDot += 16 },
 
   /* --- 生存 --- */
@@ -1227,7 +1488,181 @@ const META = [
   { id: 'revive', ic: '🌑', n: '余烬协议', d: '每局可复活一次（50% 完整度）', cost: 200, max: 1 },
   { id: 'pool2', ic: '🧬', n: '演化扩充 II', d: '再解锁 3 项高阶演化', cost: 220, max: 1 },
   { id: 'deep', ic: '🕳', n: '深渊许可', d: '开局即为深度 2（奖励更高）', cost: 340, max: 1 },
+  { id: 'slot', ic: '◇', n: '遗物陈列', d: '遗物栏位 +2（最多 6 件）', cost: 150, max: 1 },
 ];
+
+
+/* ---------- 遗物（跨局传承） ----------
+   局内的演化解的是「这一局怎么变强」，遗物解的是「这十局下来我在积累什么」。
+   遗物不会因为死亡丢掉——它是唯一真正属于你的东西。 */
+const RELIC = [
+  { id: 'lens',  ic: '◉', n: '透镜残片', d: '引力井吸附力 +30%',      eff: p => { p.pull *= 1.30; } },
+  { id: 'ember', ic: '✷', n: '余烬核',   d: '塌缩伤害 +22%',          eff: p => { p.collapseDmg *= 1.22; } },
+  { id: 'wind',  ic: '≋', n: '星风帆',   d: '移动速度 +12%',          eff: p => { p.spd *= 1.12; } },
+  { id: 'thick', ic: '▣', n: '致密层',   d: '最大完整度 +30',         eff: p => { p.maxHp += 30; } },
+  { id: 'spark', ic: '⚡', n: '静电囊',   d: '射速 +18%',              eff: p => { p.rate *= 1.18; } },
+  { id: 'orbit', ic: '◌', n: '轨道环',   d: '经验拾取范围 +60%',      eff: p => { p.magnet *= 1.6; } },
+  { id: 'prism', ic: '◆', n: '棱镜',     d: '暴击率 +8%',             eff: p => { p.crit += 0.08; } },
+  { id: 'skin',  ic: '◈', n: '相位皮膜', d: '冲刺冷却 -30%',          eff: p => { p.dashCd *= 0.7; } },
+  { id: 'twin',  ic: '∞', n: '双生印记', d: '开局即拥有双螺旋同伴',    eff: p => { p.twinWell += 1; } },
+  { id: 'venom', ic: '☠', n: '潮汐腺',   d: '井内持续伤害 +6/秒',     eff: p => { p.wellDot += 6; } },
+  { id: 'blood', ic: '❖', n: '吸积血',   d: '塌缩每杀 1 回复 0.8',    eff: p => { p.vamp += 0.8; } },
+  { id: 'echo',  ic: '◍', n: '回响芯',   d: '子弹穿透 +1',            eff: p => { p.pierce += 1; } },
+];
+const RELIC_MAP = {};
+for (const r of RELIC) RELIC_MAP[r.id] = r;
+
+
+
+/* ---------- 挑战等级 ----------
+   难度不该只有「随深度自动上升」这一种。把它交到玩家手里：
+   你自己加码，你自己拿更多结晶。0 到 5 级，每一级都写清楚换来了什么。 */
+const HEAT_MAX = 5;
+function heatMul(h) {
+  return {
+    ehp: 1 + h * 0.12,      // 敌人血量
+    esp: 1 + h * 0.09,      // 敌人数量
+    edm: 1 + h * 0.10,      // 敌人伤害
+    cry: 1 + h * 0.35,      // 结晶
+    xp:  1 + h * 0.10,      // 经验（补偿）
+  };
+}
+function heatLabel(h) {
+  if (!h) return '挑战 · 关闭';
+  return '挑战 · ' + h + ' 级（结晶 +' + Math.round(h * 35) + '%）';
+}
+
+/* ---------- 熔炼（遗物合成） ----------
+   两件遗物在核心室里烧成一件。材料消失，产物更强也更专一。
+   这一步让遗物从「收集品」变成「资源」——你会开始考虑放弃什么。 */
+const FUSED = [
+  { id: 'singular', ic: '◎', n: '奇点之眼', d: '塌缩伤害 +45%，引力井吸附 +50%',
+    eff: p => { p.collapseDmg *= 1.45; p.pull *= 1.50; } },
+  { id: 'comet', ic: '☄', n: '彗尾', d: '移速 +25%，冲刺冷却 -55%',
+    eff: p => { p.spd *= 1.25; p.dashCd *= 0.45; } },
+  { id: 'vessel', ic: '⬢', n: '容器', d: '最大完整度 +60，塌缩每杀回复 2.2',
+    eff: p => { p.maxHp += 60; p.vamp += 2.2; } },
+  { id: 'storm', ic: '⌁', n: '风暴核', d: '射速 +40%，子弹穿透 +2',
+    eff: p => { p.rate *= 1.40; p.pierce += 2; } },
+  { id: 'harvest', ic: '❈', n: '收割者', d: '拾取范围 +140%，暴击 +15%',
+    eff: p => { p.magnet *= 2.4; p.crit += 0.15; } },
+  { id: 'hydra', ic: '☵', n: '九头蛇', d: '双螺旋 +2，井内持续伤害 +16/秒',
+    eff: p => { p.twinWell += 2; p.wellDot += 16; } },
+];
+for (const f of FUSED) RELIC_MAP[f.id] = f;
+
+const FUSION = [
+  { a: 'lens',  b: 'ember', out: 'singular' },
+  { a: 'wind',  b: 'skin',  out: 'comet' },
+  { a: 'thick', b: 'blood', out: 'vessel' },
+  { a: 'spark', b: 'echo',  out: 'storm' },
+  { a: 'orbit', b: 'prism', out: 'harvest' },
+  { a: 'twin',  b: 'venom', out: 'hydra' },
+];
+
+function fuseReady() {
+  const have = SAVE.relics || [];
+  return FUSION.filter(f => have.indexOf(f.a) >= 0 && have.indexOf(f.b) >= 0);
+}
+
+function doFuse(index) {
+  const list = fuseReady();
+  const f = list[index];
+  if (!f) return false;
+  const have = SAVE.relics;
+  have.splice(have.indexOf(f.a), 1);
+  have.splice(have.indexOf(f.b), 1);
+  have.push(f.out);
+  if (!SAVE.seenRelic) SAVE.seenRelic = {};
+  SAVE.seenRelic[f.out] = 1;
+  saveGame();
+  SFX.levelup();
+  UI.toast('熔炼成功 · ' + RELIC_MAP[f.out].ic + ' ' + RELIC_MAP[f.out].n, 2600);
+  renderRelicBar();
+  renderFusion();
+  return true;
+}
+
+function renderFusion() {
+  const el = UI.el.fuseBox;
+  if (!el) return;
+  const list = fuseReady();
+  if (!list.length) {
+    el.innerHTML = '<span class="hint">两件可熔炼的遗物凑齐后，这里会出现熔炼选项</span>';
+    return;
+  }
+  el.innerHTML = '<span class="lbl">熔炼</span>' + list.map((f, i) => {
+    const A = RELIC_MAP[f.a], B = RELIC_MAP[f.b], O = RELIC_MAP[f.out];
+    return '<button class="fz" data-i="' + i + '">' +
+      '<i>' + A.ic + '</i><i>' + B.ic + '</i><span class="ar">→</span>' +
+      '<i class="out">' + O.ic + '</i><b>' + O.n + '</b></button>';
+  }).join('');
+  for (const btn of el.querySelectorAll('.fz')) {
+    btn.addEventListener('click', () => doFuse(+btn.dataset.i));
+  }
+}
+
+function relicCount() { return (SAVE.relics || []).length; }
+function relicCap() { return (SAVE.meta && SAVE.meta.slot) ? 6 : 4; }
+
+/* 把已携带的遗物效果叠到玩家身上。在 makePlayer 末尾调用。 */
+function applyRelics(p) {
+  const list = SAVE.relics || [];
+  for (const id of list) {
+    const r = RELIC_MAP[id];
+    if (r && r.eff) r.eff(p);
+  }
+  p.hp = p.maxHp;
+}
+
+/* 随机掉一件还没拥有的遗物。返回遗物对象，没有可掉的返回 null。 */
+function grantRelic() {
+  if (!SAVE.relics) SAVE.relics = [];
+  if (SAVE.relics.length >= relicCap()) return null;
+  const pool = RELIC.filter(r => SAVE.relics.indexOf(r.id) < 0);
+  if (!pool.length) return null;
+  const r = pool[Math.floor(Math.random() * pool.length)];
+  SAVE.relics.push(r.id);
+  if (!SAVE.seenRelic) SAVE.seenRelic = {};
+  SAVE.seenRelic[r.id] = 1;
+  saveGame();
+  return r;
+}
+
+/* 掉遗物的统一入口：给提示、给光效、给声音。 */
+function dropRelic(x, y, chance) {
+  if (Math.random() > chance) return;
+  const before = relicCount();
+  const r = grantRelic();
+  if (!r) return;
+  burst(x, y, 22, { col: '#ffe9a8', spd: 320, life: 0.7, r: 3, kind: 0 });
+  ring(x, y, 10, 120, '#ffe9a8', 0.55, 5);
+  SFX.levelup();
+  UI.toast('取得遗物 · ' + r.ic + ' ' + r.n + '（' + relicCount() + '/' + relicCap() + '）', 2600);
+  renderRelicBar();
+}
+
+/* 主菜单底部那一排遗物图标 */
+function renderDailyBar() {
+  const el = UI.el.dailyBar;
+  if (!el) return;
+  const m = dailyMod();
+  el.innerHTML = '<span class="lbl">今日契约</span><span class="nm">' + m.nm + '</span><span class="ds">' + m.d + '</span>';
+}
+
+function renderRelicBar() {
+  const el = UI.el.relicBar;
+  if (!el) return;
+  const list = SAVE.relics || [];
+  if (!list.length) {
+    el.innerHTML = '<span class="empty">尚无遗物 · 击败带词缀的吞噬者或完成裂隙挑战有机会取得</span>';
+    return;
+  }
+  el.innerHTML = list.map(id => {
+    const r = RELIC_MAP[id];
+    return r ? '<span class="rl" title="' + r.n + ' · ' + r.d + '"><i>' + r.ic + '</i>' + r.n + '</span>' : '';
+  }).join('');
+}
 
 /* 由 pool1 / pool2 解锁的额外演化 */
 const POOL1 = ['crit', 'blast', 'thorns', 'xp'];
@@ -1242,6 +1677,7 @@ const ACHIEVE = [
   { id: 't360',   n: '惯性',           d: '生存 6 分钟',               test: s => s.time >= 360 },
   { id: 'd3',     n: '第三层',         d: '抵达深度 3',                test: s => s.depth >= 3 },
   { id: 'd5',     n: '第五层',         d: '抵达深度 5',                test: s => s.depth >= 5 },
+  { id: 'core',   n: '核心归位',       d: '击败深度 6 的终点守卫',     test: s => s.victory },
   { id: 'combo',  n: '奇点',           d: '单次塌缩命中 20 个敌人',    test: s => s.bestCombo >= 20 },
   { id: 'lv10',   n: '共振',           d: '单局达到 10 级',            test: s => s.lv >= 10 },
 ];
@@ -1294,9 +1730,17 @@ const W = {
   shake: 0, flash: 0, hitstop: 0,
   slow: 0, slowF: 1,
   ents: [], bullets: [], orbs: [], parts: [], texts: [], wells: [], shocks: [],
-  spawnT: 0, eliteT: 0, nextElite: 3,
+  spawnT: 0, eliteT: 0, nextElite: 3, finalBoss: null, victoryPending: false, dailyMod: null, ai: null,
+  fields: [], fieldT: 26, heat: 0,
+  loop: 1,   // 深渊循环（周目），打败终点守卫后可以带着构筑继续深入
+  endless: 0,   // 无尽深渊层数。守卫生来一次，之后每层都是它更凶的迭代。
   combo: 0, comboT: 0, bestCombo: 0,
+  streak: 0, streakT: 0, frenzy: 0,   // 连续击杀 / 狂热剩余秒数
+  storm: null, stormT: 42,            // 空间风暴
   chargePower: 0,
+  rift: null,      // 现场上的裂隙 {x,y,r,t,life}
+  chal: null,      // 正在进行的裂隙挑战
+  riftT: 26,       // 距下一道裂隙还有多久
   zoom: 1, zoomT: 1, baseZoom: 1,
 };
 
@@ -1319,6 +1763,7 @@ function makePlayer() {
     pierce: 0,
     crit: 0.02,
     critMul: 1.9,
+    wellMode: 0,          // 0 透镜 / 1 撕裂 / 2 双生
     wellR: CONF.baseWellR * (1 + lv('well') * 0.12),
     pull: CONF.basePull,
     collapseDmg: CONF.baseCollapse,
@@ -1331,6 +1776,7 @@ function makePlayer() {
     xpMul: 1,
     thorns: 0,
     chainBoom: 0, timeWarp: 0, vamp: 0, echoShot: 0, twinWell: 0,
+    afterShock: 0, volley: 0, volleyCount: 0, dashPulse: 0,
     // 状态
     lv: 1, xp: 0, xpNeed: xpNeed(1),
     lvBank: 0,
@@ -1345,7 +1791,8 @@ function makePlayer() {
     startDepth: baseDepth,
     alive: true,
   };
-  p.hp = p.maxHp;
+  applyRelics(p);
+  applyDailyToPlayer(p);
   return p;
 }
 
@@ -1389,13 +1836,21 @@ function dmgText(x, y, amount, opt) {
 function makeEnemy(type, x, y, extra) {
   const T = ENEMY_TYPES[type];
   const sc = depthScale(W.depth);
+  /*
+    深渊循环：第 N 周目敌人更厚更快，
+    但结算结晶也跟着放大，否则摸到天花板后没人愿意再下去。
+  */
+  const lp = W.loop || 1;
+  const dmm = W.dailyMod || {};
   const hpM = (extra && extra.hpMul) || 1;
-  const mhp = T.hp * sc.hp * hpM;
+  const hm = heatMul(W.heat || 0);
+  const em = W.endless ? (1 + W.endless * 0.42) : 1;
+  const mhp = T.hp * sc.hp * hpM * (1 + (lp - 1) * 0.45) * (dmm.ehp || 1) * hm.ehp * em;
   return {
     t: type, x, y, vx: 0, vy: 0,
     r: T.r, hp: mhp, maxHp: mhp,
-    spd: T.spd * sc.spd * ((extra && extra.spdMul) || 1),
-    dmg: T.dmg * sc.dmg,
+    spd: T.spd * sc.spd * ((extra && extra.spdMul) || 1) * (1 + (lp - 1) * 0.06) * (dmm.espd || 1) * (1 + (W.endless || 0) * 0.04),
+    dmg: T.dmg * sc.dmg * (1 + (lp - 1) * 0.10) * (dmm.edmg || 1) * hm.edm * (1 + (W.endless || 0) * 0.08),
     xp: T.xp, col: T.col, kind: T.kind, nm: T.nm,
     hitT: 0, age: 0, alive: true,
     wob: Math.random() * TAU,
@@ -1423,6 +1878,176 @@ function spawnAtEdge(type, extra, ang) {
   const e = makeEnemy(type, x, y, extra);
   W.ents.push(e);
   return e;
+}
+
+/* ---------------- 裂隙事件 ----------------
+   每局隔一段时间在场上开一道裂隙。玩家主动走进去会接下一个限时挑战，
+   完成给一次免费演化。目的是在“活多久”之外，给玩家一条可以主动争取的支线。
+   它把节奏从“一直躲”变成“要不要为了奖励，往危险的地方走”。
+--------------------------------------------- */
+const CHAL_DEF = [
+  { id: 'harvest', nm: '收割', d: '击杀 30 个敌人', need: 30, dur: 20 },
+  { id: 'silence', nm: '静默', d: '不受到任何伤害', need: 1, dur: 20 },
+  { id: 'greed',   nm: '贪食', d: '拾取 24 个经验', need: 24, dur: 20 },
+  { id: 'crush',   nm: '碾压', d: '一次塌缩消灭 14 个敌人', need: 14, dur: 25 },
+];
+
+function spawnRift() {
+  const a = Math.random() * TAU;
+  const d = U.rnd(320, 540);
+  W.rift = { x: P.x + Math.cos(a) * d, y: P.y + Math.sin(a) * d, r: 36, t: 0, life: 28 };
+  ring(W.rift.x, W.rift.y, 10, 120, '#c084fc', 0.6, 3);
+  UI.toast('裂隙出现 · 走进去会开启挑战', 2000);
+  SFX.ui();
+}
+
+
+/* ---------- 力场地形 ----------
+   战场本来是一张白纸。给它几块「地形」，走位就有了内容：
+   漩涡逼你顺着转，重力井拽你贴脸，静滞区是你的临时堡垒。
+   三种力场都是同一件事的三面——空间本身在动手。 */
+const FIELD_TYPES = [
+  { id: 'vortex', nm: '紊流', col: '#67e8f9', r: 190, dur: 26 },
+  { id: 'pull',   nm: '引力井', col: '#a78bfa', r: 165, dur: 24 },
+  { id: 'calm',   nm: '静滞', col: '#5eead4', r: 175, dur: 22 },
+];
+
+function spawnField() {
+  if (W.fields.length >= 2) return;
+  const t = FIELD_TYPES[Math.floor(Math.random() * FIELD_TYPES.length)];
+  const a = Math.random() * TAU;
+  const d = U.rnd(380, 640);
+  const f = {
+    type: t.id, nm: t.nm, col: t.col,
+    x: P.x + Math.cos(a) * d, y: P.y + Math.sin(a) * d,
+    r: t.r, life: t.dur, max: t.dur, spin: Math.random() * TAU,
+  };
+  W.fields.push(f);
+  ring(f.x, f.y, f.r * 0.2, f.r * 1.5, t.col, 0.7, 4);
+  UI.toast('空间异动 · ' + t.nm + '区', 1800);
+}
+
+function updateFields(dt) {
+  if (!W.fields) W.fields = [];
+
+  // 生成节拍（裂隙挑战期间不干扰）
+  W.fieldT -= dt;
+  if (W.fieldT <= 0) {
+    W.fieldT = U.rnd(30, 44);
+    if (!W.chal && G.run && G.run.time > 14) spawnField();
+  }
+
+  for (let i = W.fields.length - 1; i >= 0; i--) {
+    const f = W.fields[i];
+    f.life -= dt;
+    f.spin += dt * (f.type === 'vortex' ? 1.2 : 0.5);
+    if (f.life <= 0) { W.fields.splice(i, 1); continue; }
+
+    const fade = Math.min(1, f.life / 1.6) * Math.min(1, (f.max - f.life) / 0.8);
+    if (fade <= 0.02) continue;
+
+    // 玩家受力
+    const pdx = P.x - f.x, pdy = P.y - f.y;
+    const pd = Math.sqrt(pdx * pdx + pdy * pdy) || 1;
+    if (pd < f.r) {
+      const k = (1 - pd / f.r) * fade;
+      if (f.type === 'vortex') {
+        // 切向：绕中心转
+        const tx = -pdy / pd, ty = pdx / pd;
+        P.vx += tx * 210 * k * dt;
+        P.vy += ty * 210 * k * dt;
+      } else if (f.type === 'pull') {
+        P.vx -= (pdx / pd) * 185 * k * dt;
+        P.vy -= (pdy / pd) * 185 * k * dt;
+      }
+    }
+
+    // 敌人受力
+    for (const e of W.ents) {
+      if (!e.alive) continue;
+      const dx = e.x - f.x, dy = e.y - f.y;
+      const d = Math.sqrt(dx * dx + dy * dy) || 1;
+      if (d >= f.r) continue;
+      const k = (1 - d / f.r) * fade;
+      if (f.type === 'vortex') {
+        e.x += (-dy / d) * 74 * k * dt;
+        e.y += (dx / d) * 74 * k * dt;
+      } else if (f.type === 'pull') {
+        e.x -= (dx / d) * 62 * k * dt;
+        e.y -= (dy / d) * 62 * k * dt;
+      } else {
+        // 静滞：敌人在里面走不动，玩家不受影响 —— 这是可以主动跑进去的堡垒
+        e.x -= e.vx * 0.55 * k * dt;
+        e.y -= e.vy * 0.55 * k * dt;
+      }
+    }
+  }
+}
+
+function updateRift(dt) {
+  if (W.chal) return;                       // 挑战进行中不再刷裂隙
+  if (!W.rift) {
+    W.riftT -= dt;
+    if (W.riftT <= 0 && G.run.time > 20) {
+      spawnRift();
+      W.riftT = U.rnd(28, 40);
+    }
+    return;
+  }
+  const r = W.rift;
+  r.t += dt; r.life -= dt;
+  if (r.life <= 0) { W.rift = null; return; }
+  if (U.dist(r.x, r.y, P.x, P.y) < r.r + P.r * 1.5) startChal();
+}
+
+function startChal() {
+  const pick = CHAL_DEF[Math.floor(Math.random() * CHAL_DEF.length)];
+  W.chal = { id: pick.id, nm: pick.nm, d: pick.d, need: pick.need, got: 0, dur: pick.dur, t: pick.dur, fail: false };
+  W.rift = null;
+  ring(P.x, P.y, 20, 260, '#c084fc', 0.7, 4);
+  W.flash = Math.max(W.flash, 0.16);
+  SFX.levelup();
+  UI.toast('裂隙挑战 · ' + pick.nm + ' —— ' + pick.d, 2600);
+  setTips('<em>' + pick.nm + '</em> · ' + pick.d);
+}
+
+function updateChal(dt) {
+  const c = W.chal;
+  if (!c) return;
+  if (c.fail) { failChal(); return; }
+  if (c.got >= c.need) { winChal(); return; }
+  c.t -= dt;
+  if (c.t <= 0) failChal();
+}
+
+function bumpChal(id, n) {
+  const c = W.chal;
+  if (c && !c.fail && c.id === id) c.got += (n || 1);
+}
+
+function failChal() {
+  const c = W.chal;
+  if (!c) return;
+  W.chal = null;
+  SFX.hit();
+  UI.toast('挑战失败 · ' + c.nm, 1600);
+  setTips('');
+}
+
+function winChal() {
+  const c = W.chal;
+  if (!c) return;
+  W.chal = null;
+  dropRelic(P.x, P.y, 0.34);
+  G.pendingLv++;
+  const bonus = 6 + W.depth * 3;
+  SAVE.crystals += bonus;                   // 裂隙奖励直接入档，死了也不丢
+  saveGame();
+  W.flash = Math.max(W.flash, 0.3);
+  W.shake = Math.max(W.shake, 9);
+  UI.toast('挑战完成 · ' + c.nm + ' · 结晶 +' + bonus, 2400);
+  setTips('');
+  openLevelUp(true);
 }
 
 /* ---------- 子弹 ---------- */
@@ -1535,6 +2160,8 @@ const DRAW = {
     this.grid(x0, y0, x1, y1);
     this.stars(x0, y0, x1, y1);
 
+    this.fields(ctx);
+    this.rift(ctx);
     this.wells(ctx, activeWells());
     this.orbs(ctx, x0, y0, x1, y1);
     this.enemies(ctx, x0, y0, x1, y1);
@@ -1698,6 +2325,111 @@ const DRAW = {
 
   // live = 玩家正在蓄力的井（来自 activeWells()）。它必须画出来，
   // 否则按住左键时只剩一圈虚线，看不到那个正在成形的黑洞。
+  /* 裂隙：一道在地面上慢慢旋转的暗紫漩涡，周围有虚线脉动圈。
+     它必须在整片深色背景里有足够的存在感，否则玩家不会为了它往危险处走。 */
+
+  /* 力场：地面上的三个「地形」。画得克制一点，别盖住敌人。 */
+  fields(ctx) {
+    if (!W.fields || !W.fields.length) return;
+    ctx.save();
+    for (const f of W.fields) {
+      const fade = Math.min(1, f.life / 1.6) * Math.min(1, (f.max - f.life) / 0.8);
+      if (fade <= 0.02) continue;
+      const a = 0.10 + 0.16 * fade;
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, TAU);
+      ctx.fillStyle = f.col + Math.round(a * 120).toString(16).padStart(2, '0');
+      ctx.fill();
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = f.col + Math.round((0.22 + 0.3 * fade) * 255).toString(16).padStart(2, '0');
+      ctx.setLineDash([9, 11]);
+      ctx.lineDashOffset = -f.spin * 22;
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // 内部纹理：漩涡画弧，引力井画向心短线
+      ctx.globalAlpha = 0.30 * fade;
+      ctx.strokeStyle = f.col;
+      ctx.lineWidth = 1.2;
+      for (let i = 0; i < 3; i++) {
+        const rr = f.r * (0.36 + i * 0.22);
+        ctx.beginPath();
+        if (f.type === 'vortex') {
+          ctx.arc(f.x, f.y, rr, f.spin * (1.6 - i * 0.3), f.spin * (1.6 - i * 0.3) + 2.4);
+        } else if (f.type === 'pull') {
+          for (let j = 0; j < 5; j++) {
+            const ang = f.spin + j / 5 * TAU;
+            const x1 = f.x + Math.cos(ang) * rr, y1 = f.y + Math.sin(ang) * rr;
+            const x2 = f.x + Math.cos(ang) * (rr + 14), y2 = f.y + Math.sin(ang) * (rr + 14);
+            ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+          }
+        } else {
+          ctx.arc(f.x, f.y, rr, 0, TAU);
+        }
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      // 中心标注
+      ctx.globalAlpha = 0.55 * fade;
+      ctx.fillStyle = f.col;
+      ctx.font = '600 11px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(f.nm, f.x, f.y - f.r - 10);
+      ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+  },
+
+  rift(ctx) {
+    const r = W.rift;
+    if (!r) return;
+    const t = W.time;
+    const fade = Math.min(1, r.life / 3) * Math.min(1, r.t / 0.4);
+    const pulse = 0.86 + Math.sin(t * 2.4) * 0.14;
+    ctx.save();
+    ctx.translate(r.x, r.y);
+    ctx.globalAlpha = fade;
+    drawGlow(ctx, 0, 0, r.r * 3.2 * pulse, '#c084fc', 0.30);
+    // 三条不同速度的旋转弧
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 3; i++) {
+      const ph = t * (1.1 + i * 0.34) + i * 2.1;
+      const rr = r.r * (1.05 + i * 0.30) * pulse;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, rr, rr * (0.44 + 0.1 * Math.sin(ph)), ph * 0.8, 0, TAU);
+      ctx.strokeStyle = i === 0 ? 'rgba(196,181,253,.72)' : 'rgba(167,139,250,.40)';
+      ctx.lineWidth = 2.2 - i * 0.5;
+      ctx.stroke();
+    }
+    // 中心渍黑
+    ctx.globalCompositeOperation = 'source-over';
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r.r * 0.9);
+    g.addColorStop(0, 'rgba(8,3,18,.96)');
+    g.addColorStop(0.62, 'rgba(40,10,64,.70)');
+    g.addColorStop(1, 'rgba(120,60,200,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(0, 0, r.r * 0.9, 0, TAU); ctx.fill();
+    // 被吞吸的尘埃
+    ctx.fillStyle = '#e9d5ff';
+    for (let i = 0; i < 7; i++) {
+      const a = t * 0.9 + i * TAU / 7;
+      const rr = r.r * (1.05 + 0.5 * Math.sin(t * 1.3 + i));
+      ctx.globalAlpha = fade * 0.65;
+      ctx.beginPath();
+      ctx.arc(Math.cos(a) * rr, Math.sin(a) * rr * 0.55, 1.7, 0, TAU);
+      ctx.fill();
+    }
+    ctx.restore();
+    // 外圈虚线提示
+    ctx.save();
+    ctx.globalAlpha = fade * (0.34 + 0.24 * Math.sin(t * 3));
+    ctx.strokeStyle = '#c084fc';
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([7, 9]);
+    ctx.lineDashOffset = -t * 26;
+    ctx.beginPath(); ctx.arc(r.x, r.y, r.r * 1.85, 0, TAU); ctx.stroke();
+    ctx.restore();
+  },
+
   wells(ctx, live) {
     const t = W.time;
     const list = (live && live.length) ? W.wells.concat(live) : W.wells;
@@ -1750,10 +2482,10 @@ const DRAW = {
         const hg = hc.getContext('2d');
         const cg = hg.createRadialGradient(HS / 2, HS / 2, 0, HS / 2, HS / 2, HS / 2);
         cg.addColorStop(0, 'rgba(0,0,0,1)');
-        cg.addColorStop(0.50, 'rgba(0,0,0,1)');
-        cg.addColorStop(0.66, 'rgba(7,2,18,0.92)');
-        cg.addColorStop(0.83, 'rgba(28,8,58,0.40)');
-        cg.addColorStop(1, 'rgba(40,10,70,0)');
+        cg.addColorStop(0.62, 'rgba(0,0,0,1)');
+        cg.addColorStop(0.75, 'rgba(6,2,16,0.94)');
+        cg.addColorStop(0.86, 'rgba(20,6,44,0.42)');
+        cg.addColorStop(1, 'rgba(30,8,60,0)');
         hg.fillStyle = cg;
         hg.beginPath(); hg.arc(HS / 2, HS / 2, HS / 2, 0, TAU); hg.fill();
         this._hole = hc;
@@ -1763,10 +2495,12 @@ const DRAW = {
         const cgx = cc.getContext('2d');
         const c2 = cgx.createRadialGradient(CS / 2, CS / 2, 0, CS / 2, CS / 2, CS / 2);
         c2.addColorStop(0, 'rgba(120,90,255,0)');
-        c2.addColorStop(0.56, 'rgba(120,90,255,0.05)');
-        c2.addColorStop(0.73, 'rgba(185,165,255,0.55)');
-        c2.addColorStop(0.81, 'rgba(225,248,255,0.92)');
-        c2.addColorStop(0.89, 'rgba(115,185,255,0.28)');
+        c2.addColorStop(0.60, 'rgba(120,90,255,0.03)');
+        c2.addColorStop(0.745, 'rgba(170,150,255,0.16)');
+        c2.addColorStop(0.792, 'rgba(208,235,255,0.50)');
+        c2.addColorStop(0.818, 'rgba(238,252,255,0.86)');
+        c2.addColorStop(0.848, 'rgba(140,200,255,0.24)');
+        c2.addColorStop(0.90, 'rgba(60,20,140,0.05)');
         c2.addColorStop(1, 'rgba(60,20,140,0)');
         cgx.fillStyle = c2;
         cgx.fillRect(0, 0, CS, CS);
@@ -1802,7 +2536,7 @@ const DRAW = {
       const flash = e.hitT;
       // 光晕
       ctx.globalCompositeOperation = 'lighter';
-      drawGlow(ctx, e.x, e.y, r * (e.kind === 'elite' ? 5.2 : 3.1), e.col, e.kind === 'elite' ? 0.55 : 0.4);
+      drawGlow(ctx, e.x, e.y, r * (e.kind === 'elite' ? 5.2 : 3.1), e.affixCol || e.col, e.kind === 'elite' ? 0.55 : 0.4);
       ctx.globalCompositeOperation = 'source-over';
 
       // 本体
@@ -1823,6 +2557,33 @@ const DRAW = {
         // 内核
         ctx.fillStyle = e.kind === 'elite' ? 'rgba(255,40,80,.85)' : 'rgba(20,4,10,.6)';
         ctx.beginPath(); ctx.arc(e.x, e.y, r * 0.44, 0, TAU); ctx.fill();
+      } else if (e.kind === 'anchor') {
+        // 带四角锚钉的方形壳：一眼就知道它“吸不动”
+        ctx.save();
+        ctx.translate(e.x, e.y);
+        ctx.rotate(e.wob * 0.2);
+        ctx.rect(-r * 0.82, -r * 0.82, r * 1.64, r * 1.64);
+        ctx.fill();
+        // 外框描边：深色方块在星空里太容易看漏，得给它一圈轮廓
+        ctx.strokeStyle = 'rgba(203,213,225,.80)';
+        ctx.lineWidth = 2.0;
+        ctx.stroke();
+        ctx.strokeStyle = 'rgba(8,14,22,.72)';
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        ctx.moveTo(-r * 0.45, 0); ctx.lineTo(r * 0.45, 0);
+        ctx.moveTo(0, -r * 0.45); ctx.lineTo(0, r * 0.45);
+        ctx.stroke();
+        ctx.restore();
+        ctx.fillStyle = 'rgba(10,20,30,.85)';
+        ctx.beginPath(); ctx.arc(e.x, e.y, r * 0.22, 0, TAU); ctx.fill();
+      } else if (e.kind === 'bomber') {
+        // 脉动的核：充能时越来越亮、越来越大
+        const fu = e.fuse > 0 ? Math.min(1, e.fuse / 0.62) : 0;
+        const pr = r * (1 + fu * 0.45 + Math.sin(W.time * (8 + fu * 22)) * 0.06);
+        ctx.arc(e.x, e.y, pr, 0, TAU); ctx.fill();
+        ctx.fillStyle = fu > 0 ? 'rgba(255,255,235,' + (0.35 + fu * 0.6).toFixed(2) + ')' : 'rgba(30,10,4,.75)';
+        ctx.beginPath(); ctx.arc(e.x, e.y, pr * (0.42 + fu * 0.42), 0, TAU); ctx.fill();
       } else if (e.kind === 'split') {
         ctx.arc(e.x, e.y, r, 0, TAU); ctx.fill();
         ctx.strokeStyle = 'rgba(10,6,0,.65)';
@@ -2121,6 +2882,11 @@ const DRAW = {
       ctx.strokeStyle = 'rgba(220,200,255,' + (0.12 + P.charge * 0.32) + ')';
       ctx.lineWidth = 1.6;
       ctx.beginPath(); ctx.arc(s.x, s.y, R, 0, TAU); ctx.stroke();
+      const BR = P.blastR * (0.78 + 0.5 * P.charge) * CV.cam.zoom;
+      ctx.setLineDash([3 / CV.cam.zoom, 8 / CV.cam.zoom]);
+      ctx.strokeStyle = 'rgba(94,234,212,' + (0.14 + P.charge * 0.25) + ')';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.arc(s.x, s.y, BR, 0, TAU); ctx.stroke();
       ctx.setLineDash([]);
       ctx.strokeStyle = 'rgba(200,255,250,.55)';
       ctx.beginPath();
@@ -2162,17 +2928,24 @@ const G = {
 /* ---------------- 流程 ---------------- */
 function resetWorld() {
   W.time = 0; W.kills = 0; W.combo = 0; W.comboT = 0; W.bestCombo = 0;
+  W.streak = 0; W.streakT = 0; W.frenzy = 0;
+  W.storm = null; W.stormT = U.rnd(38, 52);
   W.shake = 0; W.flash = 0; W.slow = 0; W.slowF = 1; W.hitstop = 0;
   W.ents.length = 0; W.bullets.length = 0; W.orbs.length = 0;
   W.parts.length = 0; W.texts.length = 0; W.wells.length = 0; W.shocks.length = 0;
-  W.spawnT = 0.8; W.eliteT = 0; W.nextElite = 3;
+  W.spawnT = 0.8; W.eliteT = 0; W.nextElite = 3; W.finalBoss = null; W.victoryPending = false; W.ai = null; W.fields = []; W.fieldT = U.rnd(22, 30);
+  W.rift = null; W.chal = null; W.riftT = U.rnd(24, 34); W.endless = 0;
   W.baseZoom = CV.baseZoom;
   W.zoom = W.baseZoom; W.zoomT = W.baseZoom;
   G.delayed.length = 0;
 }
 
-function startRun() {
+function startRun(loop, daily) {
   SFX.resume();
+  W.dailyMod = daily ? dailyMod() : null;
+  W.heat = U.clamp(SAVE.heat | 0, 0, HEAT_MAX);
+  // 从结算页“继续深入”进来时会带 loop；主菜单开局默认 1
+  W.loop = Math.max(1, loop || 1);
   Object.assign(P, makePlayer());
   P.evos = {};
   P.x = 0; P.y = 0;
@@ -2181,32 +2954,57 @@ function startRun() {
   W.state = 'play';
   CV.cam.x = P.x; CV.cam.y = P.y;
   G.run = {
-    time: 0, kills: 0, depth: W.depth, lv: 1,
+    time: 0, kills: 0, depth: W.depth, lv: 1, loop: W.loop, heat: W.heat || 0, endless: 0,
     bestCombo: 0, crystals: 0, startAt: performance.now(),
   };
   G.pendingLv = 0;
   G.tipStage = 0; G.tipT = 0;
   UI.only(null); UI.hud(true);
   UI.el.buffs.innerHTML = '';
+  renderRelicBar();
   HUD.reset();
   W.zoom = W.baseZoom * 1.18; W.zoomT = W.baseZoom;
 }
 
-function endRun() {
+/* 结算评级：把一整局压成一个字母。
+   「再来一次」需要一个具体的锚，而不是一串看不出好坏的原始数字。 */
+function runScore(r) {
+  const lp = r.loop || 1;
+  const sc = Math.round(
+    r.kills * 11 +
+    (r.depth - 1) * 340 +
+    Math.floor(r.time) * 9 +
+    (lp - 1) * 2600 +
+    (r.lv || 1) * 45 +
+    (r.bestCombo || 0) * 60 +
+    (r.victory ? 3000 : 0)
+  );
+  const g = sc >= 23000 ? 'S' : sc >= 14000 ? 'A' : sc >= 8000 ? 'B' : sc >= 3500 ? 'C' : 'D';
+  return { s: sc, g: g };
+}
+
+function endRun(victory) {
+  if ((W.endless || 0) > 0) victory = true;
   if (W.state === 'over') return;
   W.state = 'over';
   P.alive = false;
-  SFX.gameover();
+  if (victory) SFX.levelup(); else SFX.gameover();
   W.shake = 16;
 
   const r = G.run;
   const cryMul = 1 + (SAVE.meta.cry || 0) * 0.22;
-  const cry = Math.max(1, Math.floor((r.time / 9 + r.kills / 22 + r.depth * 7) * cryMul));
+  const lpMul = 1 + ((r.loop || 1) - 1) * 0.55;
+  const endMul = 1 + (W.endless || 0) * 0.55;
+  const dailyMul = (W.dailyMod && W.dailyMod.cry) ? W.dailyMod.cry : 1;
+  const cry = Math.max(1, Math.floor((r.time / 9 + r.kills / 22 + r.depth * 7) * cryMul * (victory ? 1.5 : 1) * lpMul * dailyMul * (r.heat ? heatMul(r.heat).cry : 1) * (1 + (W.endless || 0) * 0.55)));
   SAVE.crystals += cry;
+  const rs = runScore(Object.assign({}, r, { victory: !!victory }));
+  if (rs.s > (SAVE.bestScore || 0)) SAVE.bestScore = rs.s;
   SAVE.totalCrystals += cry;
   SAVE.runs++;
   SAVE.totalKills += r.kills;
   if (r.depth > SAVE.bestDepth) SAVE.bestDepth = r.depth;
+  if (victory && (r.loop || 1) > (SAVE.deepestLoop || 0)) SAVE.deepestLoop = r.loop;
   if (r.time > SAVE.bestTime) SAVE.bestTime = r.time;
   if (r.kills > SAVE.bestKills) SAVE.bestKills = r.kills;
   if (r.bestCombo > SAVE.maxCombo) SAVE.maxCombo = r.bestCombo;
@@ -2215,7 +3013,7 @@ function endRun() {
   // 成就检测
   const stat = {
     runs: SAVE.runs, kills: r.kills, time: r.time, depth: r.depth,
-    bestCombo: r.bestCombo, lv: r.lv,
+    bestCombo: r.bestCombo, lv: r.lv, victory: !!victory,
   };
   let newAch = [];
   for (const a of ACHIEVE) {
@@ -2229,6 +3027,11 @@ function endRun() {
   UI.el.ovTime.textContent = U.time(r.time);
   UI.el.ovKills.textContent = r.kills;
   UI.el.ovDepth.textContent = r.depth;
+  if (UI.el.ovGrade) {
+    const gg = rs.g;
+    UI.el.ovGrade.textContent = gg;
+    UI.el.ovGrade.style.color = gg === 'S' ? '#fbd25b' : gg === 'A' ? '#5eead4' : gg === 'B' ? '#7dd3fc' : gg === 'C' ? '#94a3b8' : '#64748b';
+  }
   UI.el.ovCry.textContent = cry;
   UI.el.gsCry.textContent = cry;
 
@@ -2242,10 +3045,35 @@ function endRun() {
       (P.evos[k] > 1 ? '<u>×' + P.evos[k] + '</u>' : '') + '</span>';
   }).join('');
 
+  // 结算状态
+  // 构筑评级
+  if (UI.el.ovBuild) {
+    const bt = buildTitle(P);
+    UI.el.ovBuild.innerHTML = '本局构筑 · <b>' + bt.n + '</b><span>' + bt.d + '</span>';
+  if (UI.el.ovDeep && (W.endless || 0) > 0) { UI.el.ovDeep.textContent = '深渊 ' + W.endless + ' 层'; UI.el.ovDeep.style.color = '#c4b5fd'; }
+  if (UI.el.ovHeat && UI.el.ovHeatRow) {
+    const hh = r.heat | 0;
+    UI.el.ovHeatRow.style.display = hh ? '' : 'none';
+    if (hh) { UI.el.ovHeat.textContent = hh + ' 级 · 结晶 ×' + heatMul(hh).cry.toFixed(2); UI.el.ovHeat.style.color = '#fbbf24'; }
+  }
+  }
+
+  // 胜利时才给“继续深入”：构筑带走、敌人变强、结晶更多
+  const deeperBtn = UI.el.btnDeeper;
+  if (deeperBtn) {
+    const nextLoop = (r.loop || 1) + 1;
+    deeperBtn.style.display = victory ? '' : 'none';
+    deeperBtn.textContent = '继续深入 · 深渊 ' + ROMAN(nextLoop);
+  }
+  UI.el.over.classList.toggle('victory', !!victory);
+  document.getElementById('overTitle').textContent = victory ? '核心稳定' : '塌 缩';
+  document.getElementById('overSub').textContent = victory ? 'CORE STABILIZED' : 'SIGNAL LOST';
+
   // 提示新解锁
   let msg = '';
-  if (newAch.length) msg = '里程碑：<em>' + newAch.join('、') + '</em>';
-  else if (r.depth > 1) msg = '抵达深度 ' + r.depth + ' · 继续下潜以解锁更多';
+  if (victory) msg = '终点守卫已湮灭 · 本次下潜完成 · 结晶奖励 +50%' + (newAch.length ? ' · 里程碑：<em>' + newAch.join('、') + '</em>' : '');
+  else if (newAch.length) msg = '里程碑：<em>' + newAch.join('、') + '</em>';
+  else if (r.depth > 1) msg = '抵达深度 ' + r.depth + ' · 下次继续向深度 6 推进';
   else msg = '这是第一次塌缩。核心室已开启。';
   UI.el.unlockLine.innerHTML = msg;
 
@@ -2312,7 +3140,7 @@ function rollCards() {
   return out;
 }
 
-function openLevelUp() {
+function openLevelUp(fromRift) {
   W.state = 'levelup';
   SFX.levelup();
   G.cards = rollCards();
@@ -2320,7 +3148,7 @@ function openLevelUp() {
   renderCards();
   UI.hud(true);
   UI.only('levelup');
-  UI.el.lvHead.querySelector('.big').textContent = '共 振 升 阶';
+  UI.el.lvHead.querySelector('.big').textContent = fromRift ? '裂 隙 馈 赠' : '共 振 升 阶';
   UI.el.lvHead.querySelector('.sub').textContent =
     'LV ' + P.lv + ' → ' + (P.lv + 1) + '   ·   按 1 / 2 / 3 选择' + (P.rerollLeft > 0 ? '   ·   R 重掷（剩 ' + P.rerollLeft + '）' : '');
 }
@@ -2365,6 +3193,7 @@ function chooseCard(i) {
   const c = G.cards[i];
   if (!c) return;
   SFX.select();
+  (SAVE.seenEvo = SAVE.seenEvo || {})[c.id] = 1;
   applyEvo(c);
   P.lv++;
   P.xp -= P.xpNeed;
@@ -2405,12 +3234,47 @@ function hurtEnemy(e, dmg, opt) {
   if (e.hp <= 0) killEnemy(e, opt);
 }
 
+/* 爆裂体自爆：伤玩家，也伤周围的敌人。
+   这一点很重要——它意味着把爆裂体拉进引力井里是有回报的，而不只是危险。 */
+function bomberExplode(e) {
+  if (!e.alive) return;
+  e.alive = false;
+  W.kills++; G.run.kills++;
+  bumpChal('harvest', 1);
+  (SAVE.seenEnemy = SAVE.seenEnemy || {})[e.t] = 1;
+  const sc = depthScale(W.depth);
+  const R = 112;
+  ring(e.x, e.y, e.r, R, '#fb923c', 0.45, 4);
+  burst(e.x, e.y, 20, { col: '#fb923c', spd: 320, life: 0.5, r: 3, kind: 1 });
+  W.shake = Math.max(W.shake, 5);
+  SFX.boom(0.8);
+  if (U.dist(e.x, e.y, P.x, P.y) < R + P.r) hurtPlayer(26 * sc.dmg, e.x, e.y);
+  for (const o of W.ents) {
+    if (o === e || !o.alive) continue;
+    if (U.dist(o.x, o.y, e.x, e.y) < R + o.r) hurtEnemy(o, 46 * sc.hp, { col: '#fb923c' });
+  }
+}
+
 function killEnemy(e, opt) {
   if (!e.alive) return;
   e.alive = false;
   W.kills++;
   G.run.kills++;
+  bumpChal('harvest', 1);
+  (SAVE.seenEnemy = SAVE.seenEnemy || {})[e.t] = 1;
   SFX.kill();
+  // 连杀：连续击杀累积，挨打清零。攒满 18 进入狂热。
+  W.streak++;
+  W.streakT = 3.4;
+  if (W.frenzy <= 0 && W.streak >= 18) {
+    W.frenzy = 9;
+    W.flash = Math.max(W.flash, 0.26);
+    W.shake = Math.max(W.shake, 8);
+    SFX.boom(1.5);
+    ring(P.x, P.y, 24, 420, '#fbbf24', 0.75, 5);
+    UI.toast('狂 热 · 引力过载 9 秒', 1800);
+    showFrenzy();
+  }
   const big = e.kind === 'elite';
   burst(e.x, e.y, big ? 46 : 9, { col: e.col, spd: big ? 460 : 210, life: big ? 1.1 : 0.42, r: big ? 5 : 2.6, kind: 1 });
   ring(e.x, e.y, e.r, big ? e.r * 8 : e.r * 2.6, e.col, big ? 0.55 : 0.24, big ? 4 : 1.6);
@@ -2432,6 +3296,26 @@ function killEnemy(e, opt) {
       W.ents.push(s);
     }
   }
+  // 带词缀的吞噬者是遗物的主要来源，击杀后有机会掉落
+  if (e.affix) dropRelic(e.x, e.y, 0.42);
+  // 词缀结算
+  if (e.affix === 'split') {
+    for (let i = 0; i < 3; i++) {
+      const sd = makeEnemy('shard', e.x + U.rnd(-26, 26), e.y + U.rnd(-26, 26));
+      sd.hp = sd.maxHp = 30 * depthScale(W.depth).hp;
+      W.ents.push(sd);
+    }
+    UI.toast('增殖体解体', 1200);
+  } else if (e.affix === 'volley') {
+    for (let i = 0; i < 8; i++) {
+      const a = i / 8 * TAU + Math.random() * 0.25;
+      (W.ebullets = W.ebullets || []).push({
+        x: e.x, y: e.y, vx: Math.cos(a) * 230, vy: Math.sin(a) * 230,
+        r: 5, dmg: 10 * depthScale(W.depth).dmg, life: 2.4, col: '#fb7185',
+      });
+    }
+    UI.toast('火雨扩散', 1200);
+  }
   // 连锁核心（崩解律）
   if (P.chainBoom) {
     for (const w of W.wells) {
@@ -2442,11 +3326,16 @@ function killEnemy(e, opt) {
   if (P.vamp > 0 && opt && opt.src === 'collapse') {
     P.hp = Math.min(P.maxHp, P.hp + P.vamp);
   }
+  if (e.isFinal) {
+    W.victoryPending = true;
+  }
 }
 
 function hurtPlayer(dmg, fromX, fromY) {
   if (P.invuln > 0 || !P.alive || W.state !== 'play') return;
+  if (W.chal && W.chal.id === 'silence') W.chal.fail = true;
   P.invuln = CONF.invulnOnHit;
+  W.streak = 0; W.streakT = 0;
   P.hp -= dmg;
   P.hitFlash = 0.4;
   W.shake = Math.max(W.shake, 9);
@@ -2487,7 +3376,7 @@ function hurtPlayer(dmg, fromX, fromY) {
       }
       UI.toast('余烬协议 · 重构完成', 2200);
       SFX.boom(1.6);
-    } else {
+    } else if (!W.victoryPending) {
       P.hp = 0;
       endRun();
     }
@@ -2516,30 +3405,37 @@ function releaseCharge() {
   // 防连点：两次塌缩之间至少隔 0.12 秒。疯狂点击原本会让每一帧都触发一次
   // collapseWave（上千粒子 + 冲击波 + 音效），是肉眼可见的卡顿来源。
   P.chargeCd = 0.12;
+  /*
+    完美塌缩：把蓄力压到 95% 以上再松手，伤害 ×1.55。
+    这是本作唯一的"时机技巧"——蓄太早没伤害，蓄太满会拖慢走位，
+    所以满蓄力松手必须是主动的冒险，而不是无脑按住。
+  */
+  const perfect = P.charge >= 0.95;
   const power = Math.max(0.10, P.charge);
-  collapseWave(P.wellX, P.wellY, power);
+  collapseWave(P.wellX, P.wellY, power, perfect);
   P.charge = 0;
   P.gauge = 0;
+  P.perfectT = perfect ? 0.5 : 0;
 }
 
-function collapseWave(wx, wy, power) {
-  const R = P.blastR * (0.78 + 0.5 * power);
-  const list = [];
-  for (const e of W.ents) {
-    if (!e.alive) continue;
-    if (U.dist(e.x, e.y, wx, wy) < R + e.r) list.push(e);
-  }
-  const n = list.length;
-  const inWellBonus = 1 + Math.min(1.2, n * 0.055);
-  const baseDmg = P.collapseDmg * (1 + power * 0.85) * inWellBonus;
+function collapseWave(wx, wy, power, perfect) {
+  const forecast = collapseForecast(wx, wy, power);
+  const R = forecast.R, list = forecast.list, n = list.length;
+  const md = curMode();
+  const baseDmg = forecast.dmg * (perfect ? 1.55 : 1) * md.dmg;
 
   // 视觉
   const pw = U.clamp(power, 0.15, 1);
-  SFX.boom(0.5 + pw * 1.6);
-  W.shake = Math.max(W.shake, 6 + pw * 15);
-  W.flash = Math.max(W.flash, 0.18 + pw * 0.42);
+  SFX.boom(0.5 + pw * 1.6 + (perfect ? 0.5 : 0));
+  W.shake = Math.max(W.shake, (perfect ? 12 : 6) + pw * 15);
+  W.flash = Math.max(W.flash, (perfect ? 0.32 : 0.18) + pw * 0.42);
   ring(wx, wy, 8, R * 1.9, '#c4b5fd', 0.62, 5 + pw * 5);
   ring(wx, wy, 4, R * 1.05, '#5eead4', 0.42, 3);
+  if (perfect) {
+    // 完美塌缩额外压一圈金环，和普通塌缩一眼可分
+    ring(wx, wy, 12, R * 2.3, '#fbd25b', 0.7, 7);
+    burst(wx, wy, 30, { col: '#fbd25b', spd: 540, life: 0.72, r: 3.2, kind: 0 });
+  }
   burst(wx, wy, 24 + Math.floor(pw * 46), { col: '#a78bfa', spd: 300 + pw * 700, life: 0.55 + pw * 0.4, r: 3.4, kind: 0 });
   burst(wx, wy, 12 + Math.floor(pw * 20), { col: '#5eead4', spd: 200 + pw * 500, life: 0.4, r: 2.4, kind: 0 });
   // 井口光芒
@@ -2559,8 +3455,43 @@ function collapseWave(wx, wy, power) {
     }
   }
 
-  // 大爆破横幅
+  if (P.afterShock > 0) {
+    const level = P.afterShock;
+    G.delayed.push({ t: 0.22, fn: () => {
+      if (W.state !== 'play') return;
+      const rr = P.blastR * (0.42 + level * 0.035);
+      const dmg = P.collapseDmg * (0.18 + level * 0.10) * (0.6 + pw * 0.4);
+      ring(wx, wy, rr * 0.25, rr, '#a78bfa', 0.34, 4);
+      burst(wx, wy, 14 + level * 5, { col: '#a78bfa', spd: 260, life: 0.38, r: 2.6, kind: 1 });
+      for (const target of W.ents) {
+        if (target.alive && U.dist(target.x, target.y, wx, wy) < rr + target.r)
+          hurtEnemy(target, dmg, { col: '#c4b5fd', src: 'collapse' });
+      }
+    }});
+  }
+
+  // 完美塔缩与大爆破横幅
+  // 撕裂形态：塌缩时沿三条不同角度切出去，撕裂线本身也能杀人
+  if (md.id === 1) {
+    for (let i = 0; i < 3; i++) {
+      const a = W.time * 0.7 + i / 3 * TAU;
+      W.shocks.push({ x: wx, y: wy, r0: 10, r1: R * 2.6, life: 0.34, max: 0.34, col: '#fb7185', w: 3, ang: a, cut: true });
+    }
+    for (const e of W.ents) {
+      if (!e.alive) continue;
+      const d = U.dist(e.x, e.y, wx, wy);
+      if (d > R * 2.6 || d < 8) continue;
+      const ang = Math.atan2(e.y - wy, e.x - wx);
+      for (let i = 0; i < 3; i++) {
+        const ca = W.time * 0.7 + i / 3 * TAU;
+        let da = Math.abs(((ang - ca + Math.PI) % TAU + TAU) % TAU - Math.PI);
+        if (da < 0.14) { hurtEnemy(e, baseDmg * 0.42, { crit: true, col: '#fb7185', quiet: true }); break; }
+      }
+    }
+  }
+  if (perfect) showPerfect();
   if (killed >= 6) showBlast(killed);
+  if (n >= 14) bumpChal('crush', n);
 
   // 连击
   if (n >= 5) {
@@ -2606,12 +3537,64 @@ function collapseWave(wx, wy, power) {
   }
 }
 
+function collapseForecast(wx, wy, power) {
+  const R = P.blastR * (0.78 + 0.5 * power);
+  const list = [];
+  for (const e of W.ents) {
+    if (e.alive && U.dist(e.x, e.y, wx, wy) < R + e.r) list.push(e);
+  }
+  const inWellBonus = 1 + Math.min(1.2, list.length * 0.055);
+  const dmg = P.collapseDmg * (1 + power * 0.85) * inWellBonus;
+  return { R, list, dmg };
+}
+
 /* 大爆破横幅：一次压掉一整片的爽感反馈 */
 function showBlast(n) {
   const el = UI.el.blast;
   if (!el) return;
   const nm = n >= 26 ? '事件视界' : n >= 16 ? '奇点' : n >= 10 ? '坍缩' : '湮灭';
   el.innerHTML = '×' + n + ' <span class="nm">' + nm + '</span>';
+  el.classList.remove('go');
+  void el.offsetWidth;
+  el.classList.add('go');
+}
+
+/* 根据本局选到的演化组合，给这一局的构筑起个名字。
+   不是纯数值加成，而是让玩家对“我这局打的是什么流派”有个具象认知。 */
+function buildTitle(p) {
+  const ev = p.evos || {};
+  const cnt = { W: 0, G: 0, S: 0, X: 0 };
+  for (const e of EVO) {
+    const n = ev[e.id] || 0;
+    if (!n) continue;
+    cnt[e.cat] = (cnt[e.cat] || 0) + n;
+  }
+  // 传说级异变优先命名
+  if (ev.chain) return { n: '崩解律', d: '你把整片黑暗变成了一串不稳定核心' };
+  if (ev.twin) return { n: '双螺旋', d: '两个引力井，两倍的吞噬' };
+  if (ev.vamp) return { n: '紫脉黑洞', d: '你从每一个死去的敌人身上抽血' };
+  if (ev.echoS) return { n: '回响弹幕', d: '子弹在敌群里反射' };
+  const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
+  const total = cnt.W + cnt.G + cnt.S + cnt.X || 1;
+  // 主类占不到 40% 就是混塔，不强行归类
+  if (cnt[top] / total < 0.4) return { n: '混沌混塔', d: '什么都要一点，什么都不精' };
+  if (top === 'G') return { n: '引力奇点流', d: '你的武器就是引力本身' };
+  if (top === 'W') return { n: '弹道压制流', d: '在他们靠近之前就把它们打碎' };
+  if (top === 'S') return { n: '致密生存流', d: '你不贪杀，你只是不会死' };
+  return { n: '异变体', d: '已经不太像一个潜航者了' };
+}
+
+function showFrenzy() {
+  const el = UI.el.frenzy;
+  if (!el) return;
+  el.classList.remove('go');
+  void el.offsetWidth;
+  el.classList.add('go');
+}
+
+function showPerfect() {
+  const el = UI.el.perfect;
+  if (!el) return;
   el.classList.remove('go');
   void el.offsetWidth;
   el.classList.add('go');
@@ -2643,12 +3626,24 @@ function nearestEnemy(x, y, maxR) {
 function activeWells() {
   const out = [];
   if (P.charging) {
+    const md = curMode();
+    const rr = P.wellR * (0.34 + 0.66 * P.charge) * md.r;
+    const pl = P.pull * (0.5 + 0.5 * P.charge) * md.pull;
     out.push({
       x: P.wellX, y: P.wellY,
-      r: P.wellR * (0.34 + 0.66 * P.charge),
-      pull: P.pull * (0.5 + 0.5 * P.charge),
-      t: 1, power: P.charge, live: true,
+      r: rr, pull: pl,
+      t: 1, power: P.charge, live: true, mode: md.id, col: md.col,
     });
+    // 双生：主井旁再挂一口，绕主井缓慢公转
+    if (md.id === 2) {
+      const ang = W.time * 1.4;
+      out.push({
+        x: P.wellX + Math.cos(ang) * rr * 1.15,
+        y: P.wellY + Math.sin(ang) * rr * 1.15,
+        r: rr * 0.66, pull: pl * 0.7,
+        t: 1, power: P.charge, live: true, mode: 2, col: md.col,
+      });
+    }
   }
   if (P.twinWell) {
     const a = W.time * 1.9;
@@ -2674,6 +3669,17 @@ function doDash(ax) {
   P.invuln = Math.max(P.invuln, CONF.dashDur + 0.08);
   SFX.dash();
   burst(P.x, P.y, 12, { col: '#7dfbe4', spd: 240, life: 0.3, r: 2.4, kind: 2 });
+  if (P.dashPulse > 0) {
+    const rr = 86 + P.dashPulse * 18;
+    const dmg = P.dmg * (1.15 + P.dashPulse * 0.32);
+    ring(P.x, P.y, 8, rr, '#5eead4', 0.3, 4 + P.dashPulse);
+    for (const e of W.ents) {
+      if (!e.alive || U.dist(e.x, e.y, P.x, P.y) >= rr + e.r) continue;
+      hurtEnemy(e, dmg, { col: '#8ff5df' });
+      const a = Math.atan2(e.y - P.y, e.x - P.x);
+      e.vx += Math.cos(a) * 150; e.vy += Math.sin(a) * 150;
+    }
+  }
 }
 
 function shoot() {
@@ -2688,15 +3694,30 @@ function shoot() {
       { crit, life: P.brange / P.bspeed }
     ));
   }
+  if (P.volley > 0) {
+    P.volleyCount++;
+    if (P.volleyCount >= Math.max(2, 6 - P.volley)) {
+      P.volleyCount = 0;
+      const target = nearestEnemy(P.x, P.y, 620);
+      if (target) {
+        const a = Math.atan2(target.y - P.y, target.x - P.x);
+        W.bullets.push(makeBullet(
+          P.x + Math.cos(a) * 17, P.y + Math.sin(a) * 17, a,
+          P.dmg * (0.52 + P.volley * 0.10),
+          { homing: 1, col: '#c4b5fd', life: 1.8, r: 4.2, pierce: 0 }
+        ));
+      }
+    }
+  }
   part(P.x + Math.cos(P.aim) * 20, P.y + Math.sin(P.aim) * 20,
     Math.cos(P.aim) * 120, Math.sin(P.aim) * 120, 0.12, 2.6, '#b9fff4', 0);
   SFX.shoot();
-  P.fireT = 1 / P.rate;
+  P.fireT = 1 / (P.rate * (W.frenzy > 0 ? 1.6 : 1));
 }
 
 function updatePlayer(dt) {
   const ax = IN.axis();
-  let spd = P.spd;
+  let spd = P.spd * (W.frenzy > 0 ? 1.26 : 1);
   if (P.charging) spd *= CONF.chargeSlow;
 
   if (P.dashCdT > 0) P.dashCdT -= dt;
@@ -2763,13 +3784,71 @@ function updatePlayer(dt) {
 /* ---------------- 敌人 ---------------- */
 function updateEnemies(dt) {
   const wells = activeWells();
+
+  /* ---------- 群智 ----------
+     单个敌人只会朝你走；三个敌人一起就会开始"分工"。
+     包抄逼你转身，齐射逼你找掩体（掩体就是井），
+     这两件事合起来，才让「站位」成为一门要练的东西。 */
+  if (!W.ai) W.ai = { flankT: 7.5, volleyT: 5.5 };
+  const AI = W.ai;
+
+  AI.flankT -= dt;
+  if (AI.flankT <= 0 && W.ents.length >= 6) {
+    AI.flankT = U.rnd(7, 10.5);
+    // 挑 3 个离你较远的普通敌人，让它们绕去侧后方
+    const cand = W.ents.filter(e => e.alive && !e.isFinal && e.kind !== 'anchor' && e.kind !== 'bomber' && !(e.flankT > 0));
+    cand.sort((a, b) => U.dist2(b.x, b.y, P.x, P.y) - U.dist2(a.x, a.y, P.x, P.y));
+    const side = Math.random() < 0.5 ? 1 : -1;
+    const n = Math.min(3, cand.length);
+    for (let i = 0; i < n; i++) {
+      const e = cand[i];
+      e.flankT = U.rnd(2.8, 4.2);
+      e.flankA = Math.atan2(P.y - e.y, P.x - e.x) + side * (0.9 + i * 0.34);
+    }
+    if (n > 0) ring(P.x, P.y, 60, 190, '#c4b5fd', 0.4, 2);
+  }
+
+  AI.volleyT -= dt;
+  let volleyNow = false;
+  if (AI.volleyT <= 0) {
+    AI.volleyT = U.rnd(3.4, 4.8);
+    volleyNow = true;
+    // 齐射前摇：给玩家一个「该进井里了」的信号
+    let cnt = 0;
+    for (const e of W.ents) if (e.alive && e.kind === 'ranged') cnt++;
+    if (cnt >= 2) {
+      for (const e of W.ents) {
+        if (e.alive && e.kind === 'ranged') ring(e.x, e.y, e.r * 1.1, e.r * 2.6, '#ff5f4a', 0.42, 2);
+      }
+    }
+  }
+
   for (const e of W.ents) {
     if (!e.alive) continue;
     e.age += dt;
     if (e.hitT > 0) e.hitT -= dt;
     if (e.stun > 0) e.stun -= dt;
 
+    // 爆裂体：贴近就充能自爆。它逼玩家必须走位，而不是站桩对轰。
+    if (e.kind === 'bomber') {
+      if (e.fuse === undefined) e.fuse = -1;
+      if (e.fuse >= 0) {
+        e.fuse += dt;
+        if (e.fuse > 0.62) { bomberExplode(e); continue; }
+      } else if (U.dist(e.x, e.y, P.x, P.y) < 82) {
+        e.fuse = 0;
+        ring(e.x, e.y, e.r * 0.6, e.r * 3.4, '#fb923c', 0.42, 3);
+        SFX.hit();
+      }
+    }
+
     let tx = P.x, ty = P.y;
+    // 包抄：绕到侧后方再压过来，而不是一条直线送死
+    if (e.flankT > 0) {
+      e.flankT -= dt;
+      tx += Math.cos(e.flankA) * 185;
+      ty += Math.sin(e.flankA) * 185;
+    }
     let captured = false;
     for (const w of wells) {
       const dx = w.x - e.x, dy = w.y - e.y;
@@ -2778,9 +3857,11 @@ function updateEnemies(dt) {
       if (d < R) {
         const f = 1 - d / R;
         const fp = 0.25 + 0.75 * f;
-        tx += (dx / d) * w.r * fp * 2.0;
-        ty += (dy / d) * w.r * fp * 2.0;
-        if (d < w.r * 1.02) captured = true;
+        // 锚体几乎不受引力影响：它是在逼你用子弹处理
+        const resist = e.kind === 'anchor' ? 0.15 : 1;
+        tx += (dx / d) * w.r * fp * 2.0 * resist;
+        ty += (dy / d) * w.r * fp * 2.0 * resist;
+        if (d < w.r * 1.02 && e.kind !== 'anchor') captured = true;
       }
     }
 
@@ -2795,12 +3876,11 @@ function updateEnemies(dt) {
         const a = Math.atan2(P.y - e.y, P.x - e.x) + Math.PI / 2 * e.strafe;
         targX = e.x + Math.cos(a) * 120; targY = e.y + Math.sin(a) * 120;
       }
-      e.shootT -= dt;
-      if (e.shootT <= 0 && d < 640 && !captured) {
-        e.shootT = U.rnd(2.6, 3.8);
+      // 齐射：凝视者听同一个节拍，一起开火时才有压迫感
+      if (volleyNow && d < 660 && !captured) {
         const a = Math.atan2(P.y - e.y, P.x - e.x);
         (W.ebullets = W.ebullets || []).push({
-          x: e.x, y: e.y, vx: Math.cos(a) * 250, vy: Math.sin(a) * 250,
+          x: e.x, y: e.y, vx: Math.cos(a) * 265, vy: Math.sin(a) * 265,
           r: 5, dmg: 9 * depthScale(W.depth).dmg, life: 2.2, col: '#ff5f4a',
         });
       }
@@ -2811,6 +3891,81 @@ function updateEnemies(dt) {
       targX = P.x + Math.cos(a) * rr;
       targY = P.y + Math.sin(a) * rr;
       if (d < 90) e.strafe *= -1;
+    }
+
+    if (e.isFinal && !captured) {
+      // 三阶段：血量 66% / 33% 各换一次形态。
+      // 一个只会扇形喷弹的 Boss 打完就忘；阶段切换让这场战斗本身成为可以复述的记忆。
+      const pct = e.hp / e.maxHp;
+      const ph = pct > 0.66 ? 1 : pct > 0.33 ? 2 : 3;
+      if (e.phase !== ph) { e.phase = ph; e.phaseT = 0; onBossPhase(e, ph); }
+      e.phaseT += dt;
+      const bdmg = depthScale(W.depth).dmg;
+
+      if (ph === 3) {
+        // 终局：把玩家往自己身上拽——「引力反转」，逼你反向冲刺。
+        const dd = U.dist(P.x, P.y, e.x, e.y);
+        if (dd > 50 && dd < 700) {
+          const pull = 150 * dt;
+          P.vx += (e.x - P.x) / dd * pull;
+          P.vy += (e.y - P.y) / dd * pull;
+        }
+      }
+
+      e.bossFireT -= dt;
+      if (e.bossFireT <= 0) {
+        if (ph === 1) {
+          e.bossFireT = 2.9;
+          const base = Math.atan2(P.y - e.y, P.x - e.x);
+          ring(e.x, e.y, e.r * 0.55, e.r * 1.35, '#ff718d', 0.3, 4);
+          for (let i = -2; i <= 2; i++) {
+            const a = base + i * 0.18, speed = 245;
+            (W.ebullets = W.ebullets || []).push({
+              x: e.x, y: e.y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed,
+              r: 5.5, dmg: 11 * bdmg, life: 2.8, col: '#ff718d',
+            });
+          }
+        } else if (ph === 2) {
+          e.bossFireT = 2.1;
+          // 双旋臂：两条反向旋转的弹流，给出「绕着走」的解法
+          e.spin = (e.spin || 0) + 0.6;
+          ring(e.x, e.y, e.r * 0.5, e.r * 1.2, '#fbbf24', 0.28, 4);
+          for (let arm = 0; arm < 2; arm++) {
+            for (let i = 0; i < 3; i++) {
+              const a = e.spin + arm * Math.PI + i * 0.26;
+              const speed = 205 + i * 22;
+              (W.ebullets = W.ebullets || []).push({
+                x: e.x, y: e.y, vx: Math.cos(a) * speed, vy: Math.sin(a) * speed,
+                r: 5.5, dmg: 10 * bdmg, life: 3.2, col: '#fbbf24',
+              });
+            }
+          }
+          e.summonT = (e.summonT || 0) + 1;
+          if (e.summonT % 2 === 0) {
+            for (let i = 0; i < 2; i++) {
+              const m = makeEnemy('runner', e.x + U.rnd(-70, 70), e.y + U.rnd(-70, 70));
+              W.ents.push(m);
+            }
+            UI.toast('守卫召来了疾影', 1400);
+          }
+        } else {
+          e.bossFireT = 1.6;
+          // 全向弹环 + 少量缺口：必须找到缺口穿出去，而不是硬吃
+          const gap = Math.random() * TAU;
+          const N = 26;
+          ring(e.x, e.y, e.r * 0.4, e.r * 1.9, '#f472b6', 0.34, 6);
+          for (let i = 0; i < N; i++) {
+            const a = i / N * TAU;
+            let da = Math.abs(((a - gap + Math.PI) % TAU + TAU) % TAU - Math.PI);
+            if (da < 0.24) continue;
+            (W.ebullets = W.ebullets || []).push({
+              x: e.x, y: e.y, vx: Math.cos(a) * 235, vy: Math.sin(a) * 235,
+              r: 5, dmg: 9 * bdmg, life: 3.4, col: '#f472b6',
+            });
+          }
+          W.shake = Math.max(W.shake, 8);
+        }
+      }
     }
 
     const a = Math.atan2(targY - e.y, targX - e.x);
@@ -2916,6 +4071,7 @@ function updateOrbs(dt) {
     if (d < P.r + 10) {
       o.alive = false;
       gainXp(o.xp);
+      bumpChal('greed', 1);
       SFX.pickup();
       burst(o.x, o.y, 2, { col: o.col, spd: 80, life: 0.2, r: 1.6, kind: 0 });
     }
@@ -2936,7 +4092,7 @@ function gainXp(v) {
     ring(P.x, P.y, P.r, 190, '#5eead4', 0.5, 3);
     SFX.levelup();
   }
-  if (P.lvBank > 0 && W.state === 'play') openLevelUp();
+  if (P.lvBank > 0 && W.state === 'play' && !W.victoryPending) openLevelUp();
 }
 
 /* ---------------- 特效更新 ---------------- */
@@ -2982,7 +4138,7 @@ function spawnWave() {
   const dens = CV.portrait ? 1.45 : 1;
   const cap = Math.round((70 + W.depth * 13) * dens);
   if (W.ents.length >= cap) return;
-  const n = Math.round((4 + Math.floor((W.depth - 1) * 1.0 + Math.random() * 2.2)) * (CV.portrait ? 1.2 : 1));
+  const n = Math.round((4 + Math.floor((W.depth - 1) * 1.0 + Math.random() * 2.2)) * (CV.portrait ? 1.2 : 1) * heatMul(W.heat || 0).esp);
   // 成簇生成：一波敌人从同一侧涌入，形成'那边来了一群'的压迫感
   const a0 = Math.random() * TAU;
   for (let i = 0; i < n; i++) spawnAtEdge(pickType(W.depth), null, a0 + U.rnd(-0.55, 0.55));
@@ -2994,14 +4150,130 @@ function spawnWave() {
   }
 }
 
+/* 词缀：吞噬者不再只是「血条更长」。
+   每种词缀改一件事，逼玩家换一种处理方式，而不是重复同一个动作。
+   它们不叠在终点守卫身上——那家伙已经有自己的戏份。 */
+const AFFIX = {
+  shield: { nm: '壁垒', col: '#7dd3fc', hp: 1.75, spd: 0.92 },
+  split:  { nm: '增殖', col: '#a3e635', hp: 0.92, spd: 1.10 },
+  volley: { nm: '火雨', col: '#fb7185', hp: 1.00, spd: 1.00 },
+  rage:   { nm: '狂暴', col: '#f97316', hp: 0.85, spd: 1.14 }
+};
+
 function spawnElite() {
-  const e = spawnAtEdge('elite', { hpMul: 1 + (W.depth - 1) * 0.18 });
-  e.r = ENEMY_TYPES.elite.r * (1 + (W.depth - 1) * 0.03);
+  const finalBoss = W.depth >= 6 && !W.endless;
+  const hpMul = (1 + (W.depth - 1) * 0.18) * (finalBoss ? 2.2 : 1);
+  const AK = Object.keys(AFFIX);
+  const ak = finalBoss ? null : AK[Math.floor(Math.random() * AK.length)];
+  const af = ak ? AFFIX[ak] : null;
+  const e = spawnAtEdge('elite', { hpMul: hpMul * (af ? af.hp : 1) });
+  if (af) {
+    e.affix = ak;
+    e.affixCol = af.col;
+    e.affixNm = af.nm;
+    e.spd *= af.spd;
+    e.col = af.col;
+  }
+  e.isFinal = finalBoss;
+  e.bossFireT = 2.7;
+  e.phase = 1; e.phaseT = 0; e.summonT = 0;
+  e.r = ENEMY_TYPES.elite.r * (1 + (W.depth - 1) * 0.03) * (finalBoss ? 1.22 : 1);
+  if (finalBoss) {
+    W.finalBoss = e;
+    UI.el.bossHud.classList.remove('hide');
+    UI.el.bossFill.style.width = '100%';
+    UI.el.runGoal.textContent = '目标 · 击败终点守卫';
+    UI.toast('终点守卫 · 核心吞噬者 正在接近', 3000);
+    setTips('核心吞噬者开始发射扇形弹幕——冲刺穿过弹道', 4000);
+  } else {
+    UI.toast((af ? af.nm + ' · ' : '') + '吞噬者 正在接近', 2200);
+    setTips('一个<em>吞噬者</em>出现了——用塌缩终结它');
+  }
   W.shake = 14;
   W.flash = 0.4;
-  UI.toast('吞噬者 正在接近', 2200);
-  setTips('一个<em>吞噬者</em>出现了——用塌缩终结它');
   SFX.boom(1.2);
+}
+
+
+/* Boss 换阶段：给足视听反馈，让玩家立刻知道「规则变了」。 */
+function onBossPhase(e, ph) {
+  const NM = { 1: '第一形态 · 追猎', 2: '第二形态 · 双旋', 3: '终形态 · 引力反转' };
+  const COL = { 1: '#ff718d', 2: '#fbbf24', 3: '#f472b6' };
+  e.col = COL[ph] || e.col;
+  e.affixCol = COL[ph];
+  W.shake = Math.max(W.shake, ph === 3 ? 20 : 13);
+  W.flash = Math.max(W.flash, 0.34);
+  SFX.boom(ph === 3 ? 1.6 : 1.1);
+  burst(e.x, e.y, ph === 3 ? 46 : 30, { col: COL[ph], spd: 420, life: 0.8, r: 3.4, kind: 0 });
+  ring(e.x, e.y, e.r * 0.6, e.r * 3.4, COL[ph], 0.55, ph === 3 ? 10 : 7);
+  UI.toast('终点守卫 · ' + (NM[ph] || ''), 2400);
+  setTips(ph === 3 ? '它开始<em>反向拽你</em>——冲刺要逆着来' : '守卫换了形态');
+  const lab = UI.el.bossLabel;
+  if (lab) lab.textContent = NM[ph] || '终点守卫';
+}
+
+
+/* ---------- 引力井形态 ----------
+   井是本作唯一的操作名词，那就让它本身有选择：
+   同一口井，换个捏法，打法就完全变了。
+   透镜求「宽」，撕裂求「狠」，双生求「密」。 */
+const WELL_MODES = [
+  { id: 0, nm: '透镜', col: '#5eead4', r: 1.00, pull: 1.00, dmg: 1.00, desc: '宽阔的吸积盘，稳定的聚怪' },
+  { id: 1, nm: '撕裂', col: '#fb7185', r: 0.72, pull: 1.38, dmg: 1.62, desc: '窄而锋利，塌缩时切出三道裂口' },
+  { id: 2, nm: '双生', col: '#c4b5fd', r: 0.62, pull: 0.86, dmg: 0.92, desc: '同时张开两口小井，覆盖两侧' },
+];
+
+function curMode() { return WELL_MODES[P.wellMode || 0] || WELL_MODES[0]; }
+
+function cycleWellMode() {
+  if (W.state !== 'play') return;
+  P.wellMode = ((P.wellMode || 0) + 1) % WELL_MODES.length;
+  const m = curMode();
+  SFX.ui();
+  UI.toast('井形态 · ' + m.nm + '：' + m.desc, 2000);
+  const el = UI.el.wellMode;
+  if (el) {
+    el.textContent = m.nm;
+    el.style.color = m.col;
+    el.style.borderColor = m.col + '66';
+  }
+}
+
+
+/* ---------- 每日契约 ----------
+   每天一条全局规则，全网同一天遇到的是同一条。
+   它不改操作，只改「今天的世界长什么样」——重开一局，今天的世界还是这样。 */
+const DAILY_MODS = [
+  { id: 'swift',   nm: '疾风', d: '黑暗跑得更快（速度 +22%），但经验 +25%', espd: 1.22, xp: 1.25 },
+  { id: 'fragile', nm: '薄壳', d: '你的完整度上限 -30，但塌缩伤害 +30%', hp: -30, cdmg: 1.30 },
+  { id: 'dense',   nm: '稠密', d: '敌潮更汹涌（数量 +35%），但结晶 +40%', espawn: 1.35, cry: 1.40 },
+  { id: 'wide',    nm: '视界', d: '引力井半径 +28%，但移动速度 -8%', wellR: 1.28, spd: -0.08 },
+  { id: 'dark',    nm: '无光', d: '敌人血量 +25%，但射速 +20%', ehp: 1.25, rate: 1.20 },
+  { id: 'greed',   nm: '贪婪', d: '经验拾取范围翻倍，但敌人伤害 +25%', mag: 2.0, edmg: 1.25 },
+  { id: 'calm',    nm: '静滞', d: '敌人更慢（-15%），但数量也更少、结晶 +20%', espd: 0.85, espawn: 0.75, cry: 1.20 },
+];
+
+function dailyKey() {
+  const d = new Date();
+  return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+}
+function dailyMod() {
+  const k = dailyKey();
+  return DAILY_MODS[k % DAILY_MODS.length];
+}
+
+/* 把今天的契约应用到玩家身上（开局调用一次） */
+function applyDailyToPlayer(p) {
+  const m = W.dailyMod;
+  if (!m) return;
+  if (m.hp) p.maxHp = Math.max(40, p.maxHp + m.hp);
+  if (m.cdmg) p.collapseDmg *= m.cdmg;
+  if (m.wellR) p.wellR *= m.wellR;
+  if (m.spd) p.spd *= (1 + m.spd);
+  if (m.rate) p.rate *= m.rate;
+  if (m.mag) p.magnet *= m.mag;
+  if (m.xp) p.xpMul *= m.xp;
+  p.hp = p.maxHp;
 }
 
 /* ---------------- 深度 ---------------- */
@@ -3020,8 +4292,44 @@ const TIPS_SEQ = [
   [0.6,  '按住 <em>鼠标左键</em> 张开引力井 · 松开塌缩'],
   [7.0,  '黑暗会被拽进井里 · <em>被吸住的敌人越多，塌缩越狠</em>'],
   [14.0, '<em>WASD</em> 移动 · <em>Shift</em> 冲刺躲闪 · 站在井里会被自己拖慢'],
-  [21.0, '深度会随时间加深 · 活到最后一刻，把结晶带回去'],
+  [21.0, '深度逐层加压 · 抵达深度 6 击败终点守卫，完成下潜'],
 ];
+
+/* 空间风暴：每隔一段时间，一道引力流贯穿整片空间。
+   玩家和敌人一起被推着走——它逼你重新读位置，也把散开的敌群推到一起。
+   这不是纯惩罚：被冲走时经验球也会跟着过来。 */
+function updateStorm(dt) {
+  if (W.storm) {
+    const s = W.storm;
+    s.t += dt;
+    if (s.t >= s.dur) { W.storm = null; return; }
+    // 上升段加速，收尾段减弱
+    const fadeIn = Math.min(1, s.t * 2.4);
+    const fadeOut = Math.min(1, Math.max(0, (s.dur - s.t) / 1.5));
+    const push = 330 * fadeIn * fadeOut;
+    P.vx += s.dx * push * dt;
+    P.vy += s.dy * push * dt;
+    for (const e of W.ents) {
+      if (!e.alive) continue;
+      e.x += s.dx * push * 0.40 * dt;
+      e.y += s.dy * push * 0.40 * dt;
+    }
+    for (const o of W.orbs) {
+      o.x += s.dx * push * 0.95 * dt;
+      o.y += s.dy * push * 0.95 * dt;
+    }
+    return;
+  }
+  W.stormT -= dt;
+  if (W.stormT <= 0 && G.run.time > 26 && !W.chal) {
+    const a = Math.random() * TAU;
+    W.storm = { t: 0, dur: U.rnd(5.5, 7.5), dx: Math.cos(a), dy: Math.sin(a) };
+    W.stormT = U.rnd(40, 58);
+    UI.toast('空 间 风 暴 · 顺流而行', 2200);
+    SFX.boom(0.7);
+    W.flash = Math.max(W.flash, 0.14);
+  }
+}
 
 function updatePlay(dt) {
   // 开局引导：分四段把核心机制教会玩家，学会就走
@@ -3036,6 +4344,9 @@ function updatePlay(dt) {
   G.run.time += dt;
   W.time += dt;
   if (W.comboT > 0) { W.comboT -= dt; if (W.comboT <= 0) W.combo = 0; }
+  if (W.streakT > 0) { W.streakT -= dt; if (W.streakT <= 0) W.streak = 0; }
+  if (W.frenzy > 0) W.frenzy -= dt;
+  updateStorm(dt);
 
   const nd = depthOf(G.run.time) + (P.startDepth - 1);
   if (nd > W.depth) { W.depth = nd; G.run.depth = nd; onDepthUp(); }
@@ -3045,6 +4356,9 @@ function updatePlay(dt) {
   updateEBullets(edt);
   updateBullets(edt);
   updateOrbs(dt);
+  updateRift(dt);
+  updateFields(dt);
+  updateChal(dt);
   updateFx(dt);
 
   for (const d of G.delayed) d.t -= dt;
@@ -3097,7 +4411,31 @@ const HUD = {
     if (this._c.t !== tstr) { this._c.t = tstr; e.clock.textContent = tstr; }
     if (this._c.d !== W.depth) {
       this._c.d = W.depth;
-      e.depth.innerHTML = '深度 <b>' + W.depth + '</b>';
+      const tag = (W.loop || 1) > 1 ? '深渊 ' + ROMAN(W.loop) + ' · ' : '';
+      e.depth.innerHTML = tag + '深度 <b>' + W.depth + '</b>';
+      e.runGoal.textContent = tag + (W.depth >= 6 ? '目标 · 击败终点守卫' : '目标 · 抵达深度 6 · ' + Math.min(W.depth, 6) + '/6');
+    }
+    // 裂隙挑战条
+    const chalNow = W.chal;
+    if (chalNow) {
+      e.chalHud.classList.remove('hide');
+      e.chalNm.textContent = chalNow.nm + ' ' + chalNow.got + '/' + chalNow.need;
+      e.chalFill.style.transform = 'scaleX(' + Math.min(1, chalNow.got / chalNow.need).toFixed(3) + ')';
+      e.chalTime.textContent = Math.max(0, chalNow.t).toFixed(1);
+    } else if (!e.chalHud.classList.contains('hide')) {
+      e.chalHud.classList.add('hide');
+    }
+
+    const boss = W.finalBoss;
+    if (boss && boss.alive) {
+      e.bossHud.classList.remove('hide');
+      const hpPct = U.clamp(boss.hp / boss.maxHp, 0, 1);
+      if (force || Math.abs((this._c.bossHp === undefined ? -1 : this._c.bossHp) - hpPct) > 0.002) {
+        this._c.bossHp = hpPct;
+        e.bossFill.style.width = (hpPct * 100).toFixed(1) + '%';
+      }
+    } else {
+      e.bossHud.classList.add('hide');
     }
     if (this._c.k !== W.kills) { this._c.k = W.kills; e.killNum.textContent = W.kills; }
     const xpPct = U.clamp(P.xp / P.xpNeed, 0, 1);
@@ -3117,7 +4455,15 @@ const HUD = {
     if (this._c.cp !== cp || this._c.cOn !== P.charging) {
       this._c.cp = cp; this._c.cOn = P.charging;
       e.gauge.classList.toggle('on', P.charging);
-      e.gaugeTxt.textContent = P.charging ? '引力积累 ' + cp + '%' : '引力积累';
+    }
+    let chargeLabel = '引力积累';
+    if (P.charging) {
+      const forecast = collapseForecast(P.wellX, P.wellY, ch);
+      chargeLabel = '蓄力 ' + cp + '% · 当前预估命中 ' + forecast.list.length + ' · 单体约 ' + Math.round(forecast.dmg);
+    }
+    if (force || this._c.chargeLabel !== chargeLabel) {
+      this._c.chargeLabel = chargeLabel;
+      e.gaugeTxt.textContent = chargeLabel;
     }
   },
   updateBuffs() {
@@ -3161,6 +4507,28 @@ function loop(now) {
   if (W.state === 'play') updatePlay(dt);
   else idleUpdate(dt);
 
+    if (W.victoryPending && W.state === 'play') {
+      W.victoryPending = false;
+      // 守卫倒下不是终点，是门开了。
+      W.endless += 1;
+      W.depth += 2;
+      W.finalBoss = null;
+      W.nextElite = W.depth + 1;
+      G.pendingLv += 1;
+      SFX.levelup(); SFX.ambient.setDepth(W.depth);
+      W.flash = Math.max(W.flash || 0, 0.42);
+      W.shake = Math.max(W.shake || 0, 18);
+      for (let i = 0; i < 40; i++) {
+        const a = Math.random() * TAU, r = U.rnd(20, 320);
+        part(P.x + Math.cos(a) * r, P.y + Math.sin(a) * r,
+             -Math.cos(a) * 220, -Math.sin(a) * 220,
+             U.rnd(0.7, 1.4), 3, '#c4b5fd', 0);
+      }
+      UI.toast('深渊之门开启 · 第 ' + W.endless + ' 层 · 深度 ' + W.depth, 3400);
+      setTips('<em>守卫倒下，门开了</em> · 继续下潜会越来越凶，随时可以按 Esc 结束并带走结晶');
+      openLevelUp();
+    }
+
   HUD.tick();
   // 暂停与结算时画面本来就是静止的，不必再重绘整块画布（省下每帧的填充开销）
   if (W.state !== 'pause' && W.state !== 'over' && W.state !== 'levelup') DRAW.frame();
@@ -3198,8 +4566,11 @@ function togglePause() {
 
 /* ---------------- 菜单数据 ---------------- */
 function updateMenuStats() {
+  renderRelicBar();
+  renderDailyBar();
   const e = UI.el;
-  e.stBest.textContent = SAVE.bestDepth || 0;
+  const lp = SAVE.deepestLoop || 0;
+  e.stBest.textContent = (SAVE.bestDepth || 0) + (lp > 1 ? ' · ' + ROMAN(lp) : '');
   e.stKills.textContent = U.fmt(SAVE.totalKills || 0);
   e.stRuns.textContent = SAVE.runs || 0;
   e.stCry.textContent = SAVE.crystals || 0;
@@ -3209,7 +4580,74 @@ function updateMenuStats() {
 function metaLv(id) { return SAVE.meta[id] || 0; }
 function metaCost(m) { return m.cost * (metaLv(m.id) + 1); }
 
+/* 档案（图鉴）：把“遇到过什么”和“拿到过什么”变成可以翻的东西。
+   收集本身就是回来的理由之一。 */
+const CX_ENEMY_DESC = {
+  mote: '最普通的暗物质碎屑。数量本身就是威胁。',
+  runner: '直线冲向你的疾影，快得来不及瞄准。',
+  brute: '皮糙肉厚。塜缩能撼动它，但一口吃不下。',
+  splitter: '打碎后分成两半，两半都会继续追你。',
+  shooter: '远程点射。红色的弹道是它唯一的警告。',
+  orbiter: '绕着你画圈，逼你同时应付四个方向。',
+  shard: '裂体的碎片。小、快、烦人。',
+  elite: '每三层的守卫。它会持续开火，别站定。',
+  anchor: '几乎不受引力影响 —— 它逼你用子弹。',
+  bomber: '贴脸自爆。把它拽进井里，它能替你清场。'
+};
+
+function renderCodex(tab) {
+  tab = tab || 'enemy';
+  const grid = UI.el.codexGrid;
+  if (!grid) return;
+  const seenE = SAVE.seenEnemy || {}, seenV = SAVE.seenEvo || {};
+  const out = [];
+  let got = 0;
+  if (tab === 'enemy') {
+    const keys = ['mote', 'runner', 'brute', 'splitter', 'shooter', 'orbiter', 'shard', 'anchor', 'bomber', 'elite'];
+    for (const k of keys) {
+      const T = ENEMY_TYPES[k]; if (!T) continue;
+      const has = !!seenE[k]; if (has) got++;
+      const dsc = CX_ENEMY_DESC[k] || '';
+      out.push(
+        '<div class="cxCard' + (has ? '' : ' lock') + '">' +
+        '<div class="h"><span class="cxDot" style="background:' + (has ? T.col : '#3a4a55') + '"></span>' +
+        '<b>' + (has ? T.nm : '？？？') + '</b>' +
+        '<i>' + (has ? 'HP ' + T.hp : '未记录') + '</i></div>' +
+        '<p>' + (has ? dsc : '尚未遭遇。') + '</p></div>');
+    }
+    UI.el.codexSub.textContent = '已记录 ' + got + ' / ' + keys.length + ' 种';
+  } else if (tab === 'relic') {
+    const seenR = SAVE.seenRelic || {};
+    const list = RELIC.concat(FUSED);
+    for (const r of list) {
+      const isF = RELIC.indexOf(r) < 0;
+      const has = !!seenR[r.id] || (SAVE.relics || []).indexOf(r.id) >= 0;
+      if (has) got++;
+      out.push(
+        '<div class="cxCard' + (has ? '' : ' lock') + (isF ? ' fused' : '') + '">' +
+        '<div class="h"><span class="cxIc">' + (has ? r.ic : '？') + '</span>' +
+        '<b>' + (has ? r.n : '？？？') + '</b>' +
+        '<i>' + (isF ? '熔炼产物' : '遗物') + '</i></div>' +
+        '<p>' + (has ? r.d : '尚未取得。') + '</p></div>');
+    }
+    UI.el.codexSub.textContent = '已收录 ' + got + ' / ' + list.length + ' 件';
+  } else {
+    for (const E of EVO) {
+      const has = !!seenV[E.id]; if (has) got++;
+      const rar = E.rar === 3 ? '异变' : E.rar === 2 ? '稀有' : '常见';
+      out.push(
+        '<div class="cxCard' + (has ? '' : ' lock') + '">' +
+        '<div class="h"><b>' + (has ? E.n : '？？？') + '</b>' +
+        '<i>' + E.cat + ' · ' + rar + '</i></div>' +
+        '<p>' + (has ? E.d : '尚未获得。') + '</p></div>');
+    }
+    UI.el.codexSub.textContent = '已收集 ' + got + ' / ' + EVO.length + ' 项';
+  }
+  grid.innerHTML = out.join('');
+}
+
 function renderMeta() {
+  renderFusion();
   const list = UI.el.metaList;
   const sub = document.getElementById('metaSub');
   if (sub) {
@@ -3305,6 +4743,7 @@ IN.onKey = function (k) {
     UI.toast(m ? '已静音 · 再按 M 恢复' : '声音已开启', 1400);
     return;
   }
+  if (k === 'KeyV') { cycleWellMode(); return; }
   if (k === 'Escape') {
     if (W.state === 'play' || W.state === 'levelup') togglePause();
     else if (W.state === 'pause') togglePause();
@@ -3321,11 +4760,38 @@ function bindUI() {
     if (el) el.addEventListener('click', e => { e.stopPropagation(); SFX.resume(); SFX.ui(); fn(); });
   };
   on('btnStart', () => startRun());
+  on('btnDaily', () => { SFX.resume(); startRun(1, true); });
+  const heatBtn = $('btnHeat');
+  if (heatBtn) {
+    const paintHeat = () => { heatBtn.textContent = heatLabel(SAVE.heat | 0); heatBtn.style.color = (SAVE.heat | 0) ? '#fbbf24' : ''; };
+    paintHeat();
+    heatBtn.addEventListener('click', () => {
+      SAVE.heat = ((SAVE.heat | 0) + 1) % (HEAT_MAX + 1);
+      saveGame(); paintHeat(); SFX.ui();
+      UI.toast(SAVE.heat ? '挑战 ' + SAVE.heat + ' 级 · 结晶 +' + Math.round(SAVE.heat * 35) + '%' : '挑战已关闭', 1800);
+    });
+  }
   on('btnAgain', () => startRun());
+  on('btnDeeper', () => startRun((G.run && G.run.loop || 1) + 1));
   on('btnToMenu', () => toMenu());
   on('btnMeta', () => { W.state = 'meta'; UI.only('meta'); renderMeta(); });
   on('btnMetaClose', () => toMenu());
   on('btnHelp', () => { W.state = 'help'; UI.only('help'); });
+  on('btnCodex', () => {
+    W.state = 'codex'; UI.only('codex');
+    const ts = UI.el.codexTabs;
+    if (ts) for (const b of ts.children) b.classList.toggle('on', b.dataset.tab === 'enemy');
+    renderCodex('enemy');
+  });
+  on('btnCodexBack', () => toMenu());
+  if (UI.el.codexTabs) {
+    UI.el.codexTabs.addEventListener('click', ev => {
+      const b = ev.target.closest('.cxTab');
+      if (!b) return;
+      for (const x of UI.el.codexTabs.children) x.classList.toggle('on', x === b);
+      renderCodex(b.dataset.tab);
+    });
+  }
   on('btnHelpClose', () => toMenu());
   on('btnResume', () => togglePause());
   on('btnQuit', () => { endRun(); });
@@ -3334,7 +4800,7 @@ function bindUI() {
       try { localStorage.removeItem(KEY); } catch (e) { }
       SAVE.crystals = 0; SAVE.totalCrystals = 0;
       SAVE.bestDepth = 0; SAVE.bestTime = 0; SAVE.bestKills = 0;
-      SAVE.runs = 0; SAVE.totalKills = 0; SAVE.meta = {}; SAVE.seen = {};
+      SAVE.runs = 0; SAVE.totalKills = 0; SAVE.meta = {}; SAVE.seen = {}; SAVE.relics = [];
       SAVE.maxCombo = 0; SAVE.firstRunDone = false;
       saveGame();
       renderMeta();
@@ -3361,6 +4827,33 @@ function bindUI() {
       SAVE.fx = SAVE.fx === 0 ? 1 : 0;
       saveGame(); paintFlash(); SFX.ui();
       UI.toast(SAVE.fx === 0 ? '闪光效果已关闭' : '闪光效果已开启', 1300);
+    });
+  }
+
+  /*
+    操作方式：自动 / 触屏 / 键鼠。
+    带触摸屏的 Windows 笔记本会被"自动"误判成手机，所以留一个手动开关。
+    切换后整页刷新最省事——JOY 节点绑定、body.touch 类都是一次性建立的。
+  */
+  const dailyBtn = $('btnDaily');
+  if (dailyBtn) { const m = dailyMod(); dailyBtn.textContent = '今日契约 · ' + m.nm; }
+  const inputBtn = $('btnInput');
+  if (inputBtn) {
+    const ORDER = ['auto', 'touch', 'mouse'];
+    const LABEL = { auto: '自动', touch: '触屏', mouse: '键鼠' };
+    const paintInput = () => {
+      const m = SAVE.input || 'auto';
+      inputBtn.textContent = '操作 · ' + LABEL[m] + (m === 'auto' ? (TOUCH ? '(触屏)' : '(键鼠)') : '');
+    };
+    paintInput();
+    inputBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const cur = SAVE.input || 'auto';
+      SAVE.input = ORDER[(ORDER.indexOf(cur) + 1) % ORDER.length];
+      saveGame();
+      SFX.ui();
+      UI.toast('操作方式：' + LABEL[SAVE.input], 900);
+      setTimeout(() => location.reload(), 320);
     });
   }
 
